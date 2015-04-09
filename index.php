@@ -89,7 +89,6 @@ and open the template in the editor.
              * GET PARTICIPANT'S CHAMPION AND TEAM ID
              * 
              */
-            //TEST
             foreach($thismatch['participants'] as $participants){
                 $participants = get_object_vars($participants);
                 $summoners[$participants['participantId']]['championId'] = $participants['championId'];
