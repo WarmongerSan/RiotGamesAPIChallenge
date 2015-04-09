@@ -12,23 +12,25 @@ and open the template in the editor.
         <title></title>
     </head>
     <body>
-        <form action=" " method="post">
-            <input type="text" name="summoner" placeholder="Summoner Name" />
-        </form>
         <?php
             if(isset($_POST['summoner'])){
-                $allmatches = get_object_vars(json_decode(file_get_contents("https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/382991?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                //$_POST['summoner'] = str_replace(" ", "", $_POST['summoner']);
+                $summoner = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v1.4/summoner/by-name/".$_POST['summoner']."?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                foreach($summoner as $user){
+                    $user = get_object_vars($user);
+                    $_SESSION['userid'] = $user['id'];
+                }
+                $allmatches = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/matchhistory/".$_SESSION['userid']."?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
                 foreach($allmatches as $matches){
                     foreach($matches as $match){
                         $match = get_object_vars($match);
                         //if($match['queueType'] === "URF_5x5"){
                             echo "<br /><br />" . $match['queueType'] . "<br />";
-                            echo "<br /><br />" . $match['queueType'] . "<br />";
                             print_r(array_values($match));
 
                         //}
                     }
-                    print_r($matches . "<br />");
+                    //print_r($matches . "<br />");
                 }
                 /***
                  * 
@@ -74,8 +76,18 @@ and open the template in the editor.
                     }
                     }
                 }
-            }
+            } else {
          ?>
+        <form action=" " method="post">
+            <input type="text" name="summoner" placeholder="Summoner Name" />
+            <select name="server">
+                <option value="na">North America</option>
+                <option value="euw">Europa West</option>
+                <option value="eune">Europa North-Eastern</option>
+            </select>
+            <input type="submit" value="Submit" />
+        </form>
+        <?php } ?>
     </body>
 </html>
 <?php session_destroy(); ?>
