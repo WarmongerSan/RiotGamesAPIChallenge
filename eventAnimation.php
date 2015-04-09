@@ -25,6 +25,7 @@ and open the template in the editor.
                 padding: 5px;
                 width: 50%;
                 float: left;
+                vertical-align: middle;
             }
             .endscreen{
                 width: 75% !important;
@@ -151,7 +152,7 @@ and open the template in the editor.
         <div style="width: 50%; margin-left: 25%; text-align: center;">
             <button>Back to the beginning</button>
             <button id="Pause" style="display:none;">Pause</button>
-            <button id="Play" onclick="javascript: listTicker({list: eventList ,startIndex:0,trickerPanel: $('#events'),interval: 3 * 50,});">Play</button>
+            <button id="Play" onclick="javascript: listTicker({list: eventList ,startIndex:0,trickerPanel: $('#events'),interval: 3 * 1000,});">Play</button>
             <button id="Play2" style="display:none;">Play</button>
             <button>Next Player</button>
         </div>
