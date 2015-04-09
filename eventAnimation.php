@@ -11,24 +11,53 @@ and open the template in the editor.
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <title></title>
         <style>
+            @media all and (min-width: 1000px) { 
+                #events{
+                    width: 65%;
+                    margin-left: 17.5%;
+                    border-top: 2px solid #000;
+                    border-right: 2px solid #000;
+                    border-left: 2px solid #000;
+                }
+            }
+            @media all and (min-width: 1400px) { 
+                #events{
+                    width: 50%;
+                    margin-left: 25%;
+                    border-top: 2px solid #000;
+                    border-right: 2px solid #000;
+                    border-left: 2px solid #000;
+                }
+            }
+            @media all and (min-width: 800px) { 
+                #events{
+                    width: 75%;
+                    margin-left: 12.5%;
+                    border-top: 2px solid #000;
+                    border-right: 2px solid #000;
+                    border-left: 2px solid #000;
+                }
+            }
+            @media all and (max-width: 799px) { 
+                #events{
+                    width: 95%;
+                    margin-left: 2.5%;
+                    border-top: 2px solid #000;
+                    border-right: 2px solid #000;
+                    border-left: 2px solid #000;
+                }
+            }
             #time{
-                border-right: 2px solid #000;
                 border-bottom: 2px solid #000;
                 width: auto;
             }
             .event{
                 width: 100%;
                 border-bottom: 2px solid #000;
-                border-left: 2px solid #000;
-            }
-            #events{
-                width: 50%;
-                margin-left: 25%;
-                border-top: 2px solid #000;
             }
             #item{
                 padding: 5px;
-                width: 50%;
+                width: 40%;
                 float: left;
                 vertical-align: middle;
             }
@@ -157,7 +186,7 @@ and open the template in the editor.
         <div style="width: 50%; margin-left: 25%; text-align: center;">
             <button>Back to the beginning</button>
             <button id="Pause" style="display:none;">Pause</button>
-            <button id="Play" onclick="javascript: listTicker({list: eventList ,startIndex:0,trickerPanel: $('#events'),interval: 3 * 1000,});">Play</button>
+            <button id="Play" onclick="javascript: listTicker({list: eventList ,startIndex:0,trickerPanel: $('#events'),interval: 3 * 50,});">Play</button>
             <button id="Play2" style="display:none;">Play</button>
             <button>Next Player</button>
         </div>
