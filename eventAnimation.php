@@ -10,14 +10,33 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <title></title>
+        <style>
+            #time{
+                border-right: 2px solid #000;
+                border-bottom: 2px solid #000;
+                width: auto;
+            }
+            .event{
+                width: 50%;
+                margin-left: 25%;
+                border: 2px solid #000;
+            }
+            #item{
+                padding: 5px;
+                width: 50%;
+                float: left;
+            }
+            .endscreen{
+                width: 75% !important;
+                margin-left: 12.5% !important;
+            }
+            .event > img:not(.endscreen){
+               float: right;
+            }
+            .clear { clear: both; }
+        </style>
     </head>
     <body>
-        <button>Back to the beginning</button>
-        <button id="Pause" style="display:none;">Pause</button>
-        <button id="Play" onclick="javascript: listTicker({list: eventList ,startIndex:0,trickerPanel: $('#events'),interval: 3 * 50,});">Play</button>
-        <button id="Play2" style="display:none;">Play</button>
-        <button>Next Player</button>
-        <div id="events"></div>
         <?php
             /*$allmatches = get_object_vars(json_decode(file_get_contents("https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/382991?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
             foreach($allmatches as $matches){
@@ -118,12 +137,26 @@ and open the template in the editor.
                 $teamid = $team['teamId'];
                 if ($summoners[9]['teamId'] === $teamid){
                     if($team['winner'] === true){
-                        $summoners[9]['win'] = "<img src=\'images/Victory.png\' />";
+                        $summoners[9]['win'] = "<img class=\'endscreen\' src=\'images/Victory.png\' />";
                     } elseif($team['winner'] === false){
-                        $summoners[9]['win'] = "<img src=\'images/Defeat.png\' />";
+                        $summoners[9]['win'] = "<img class=\'endscreen\' src=\'images/Defeat.png\' />";
                     }
                 }
             }
+            ?>
+        <div style="width: 50%; margin-left: 25%; text-align: center;">
+            <h2>Events of <?php echo $summoners[9]['summonerName'] . " as " . $champion[$summoners[9]['championId']]['name'] . " <img src='images/".str_replace(" ", "", $champion[$summoners[9]['championId']]['name'])."Square.png'" ?></h2>
+        </div><br />
+        <div style="width: 50%; margin-left: 25%; text-align: center;">
+            <button>Back to the beginning</button>
+            <button id="Pause" style="display:none;">Pause</button>
+            <button id="Play" onclick="javascript: listTicker({list: eventList ,startIndex:0,trickerPanel: $('#events'),interval: 3 * 50,});">Play</button>
+            <button id="Play2" style="display:none;">Play</button>
+            <button>Next Player</button>
+        </div>
+
+        <div id="events"></div>
+            <?php
             /***
              * 
              * GET ALL FRAMES WHICH CONTAIN THE EVENTS
@@ -203,8 +236,8 @@ and open the template in the editor.
                         } else {
                             $itemimage = str_replace(" ", "_", $itemimagename).".png";
                         }
-                        $e =  "Purchased " . $items[$userEvent['itemId']]['name'] . "<img src='images/".$itemimage."' />";
-                        $lastitem[$userEvent['timestamp']] = $items[$userEvent['itemId']]['name'] . "<img src='images/".$itemimage."' />";
+                        $e =  "Purchased " . $items[$userEvent['itemId']]['name'] . " | <img src='images/".$itemimage."' />";
+                        $lastitem[$userEvent['timestamp']] = $items[$userEvent['itemId']]['name'] . " | <img src='images/".$itemimage."' />";
                     }
                     if($userEvent['eventType'] === "ITEM_DESTROYED"){
                         $ditemimagename = str_replace("'", "", $items[$userEvent['itemId']]['name']);
@@ -218,32 +251,32 @@ and open the template in the editor.
                             $ditemimage = str_replace(" ", "_", $ditemimagename).".png";
                         }
                         if(strpos($items[$userEvent['itemId']]['name'], "Potion") !== false || strpos($items[$userEvent['itemId']]['name'], "Biscuit of Rejuvenation") !== false){
-                            $e =  "Used " . $items[$userEvent['itemId']]['name'] . "<img src='images/".$ditemimage."' />";
+                            $e =  "Used " . $items[$userEvent['itemId']]['name'] . " | <img src='images/".$ditemimage."' />";
                         } elseif(strpos($items[$userEvent['itemId']]['name'], "Ward") !== false){
-                            $e =  "Placed " . $items[$userEvent['itemId']]['name'] . "<img src='images/".$ditemimage."' />";
+                            $e =  "Placed " . $items[$userEvent['itemId']]['name'] . " | <img src='images/".$ditemimage."' />";
                         } else {
                             if(!isset($lastitem[$userEvent['timestamp']])){
-                                $e =  "Destroyed " . $items[$userEvent['itemId']]['name'] . "<img src='images/".$ditemimage."' />";
+                                $e =  "Destroyed " . $items[$userEvent['itemId']]['name'] . " | <img src='images/".$ditemimage."' />";
                             } else{
-                                $e =  "Upgraded " . $items[$userEvent['itemId']]['name'] . "<img src='images/".$ditemimage."' />";
+                                $e =  "Upgraded " . $items[$userEvent['itemId']]['name'] . " | <img src='images/".$ditemimage."' />";
                                 if(isset($lastDeleted[$userEvent['timestamp']])){
                                     foreach($lastDeleted[$userEvent['timestamp']] as $deleted){
                                         if($deleted === end($lastDeleted[$userEvent['timestamp']])){
-                                            $e .=  " and " . $deleted;
+                                            $e .=  " | and " . $deleted;
                                         } else {
-                                            $e .=  ", " . $deleted;
+                                            $e .=  " | , " . $deleted;
                                         }
                                     }
                                 }
-                                $e .=  " into " . $lastitem[$userEvent['timestamp']];
-                                $lastDeleted[$userEvent['timestamp']][] = $items[$userEvent['itemId']]['name'] . "<img src='images/".$ditemimage."' />";
+                                $e .=  " | into " . $lastitem[$userEvent['timestamp']];
+                                $lastDeleted[$userEvent['timestamp']][] = $items[$userEvent['itemId']]['name'] . " | <img src='images/".$ditemimage."' />";
                                 $removeLast = true;
                             }
                         }
                     }
                     if($userEvent['eventType'] === "CHAMPION_KILL"){
                         $victimChampImage = str_replace(" ", "", $champion[$summoners[$userEvent['victimId']]['championId']]['name']) . "Square.png";
-                        $e = "Killed " . $summoners[$userEvent['victimId']]['summonerName'] . " as " . $champion[$summoners[$userEvent['victimId']]['championId']]['name'] . "<img src='images/".$victimChampImage."'/>";
+                        $e = "Killed " . $summoners[$userEvent['victimId']]['summonerName'] . " as " . $champion[$summoners[$userEvent['victimId']]['championId']]['name'] . " | <img src='images/".$victimChampImage."'/>";
                     }
                     if($userEvent['eventType'] === "WARD_KILL"){
                         if($userEvent['wardType'] === "YELLOW_TRINKET" || $userEvent['wardType'] === "YELLOW_TRINKET_UPGRADE"){
@@ -258,7 +291,7 @@ and open the template in the editor.
                             $wardkilled = "Vision ward";
                             $wardkillimage = "Vision_Ward.png";
                         }
-                        $e = "Destroyed an enemy " . $wardkilled . "<img src='images/".$wardkillimage."'/>";
+                        $e = "Destroyed an enemy " . $wardkilled . " | <img src='images/".$wardkillimage."'/>";
                     }
                     if($userEvent['eventType'] === "SKILL_LEVEL_UP"){
                         $skillname = $championsSpells[$summoners[9]['championId']][$userEvent['skillSlot']]['name'];
@@ -266,7 +299,7 @@ and open the template in the editor.
                         if($skillname === "Zephyr" || $skillname === "Distortion"){
                             $skillimage = str_replace(" ", "_", $skillname)."_skill.png";
                         }
-                        $e = "Upgraded the skill " . $skillname  . "<img src='images/".$skillimage."' />";
+                        $e = "Upgraded the skill " . $skillname  . " | <img src='images/".$skillimage."' />";
                     }
                     if($userEvent['eventType'] === "WARD_PLACED"){
                         if($userEvent['wardType'] === "YELLOW_TRINKET"){
@@ -281,10 +314,10 @@ and open the template in the editor.
                             $wardplaced = "Vision ward";
                             $wardplacedimage = "Vision_Ward.png";
                         }
-                        $e =  "Placed " . $wardplaced . "<img src='images/".$wardplacedimage."' />";
+                        $e =  "Placed " . $wardplaced . " | <img src='images/".$wardplacedimage."' />";
                     }
                     if($userEvent['eventType'] === "BUILDING_KILL"){
-                        $e = "Destroyed the " . $userEvent['towerType'] . "<img src='images/Turret.png' />";
+                        $e = "Destroyed the " . $userEvent['towerType'] . " | <img src='images/Turret.png' />";
                     }
                     if($userEvent['eventType'] === "ELITE_MONSTER_KILL"){
                         if($userEvent['monsterType'] === "BARON_NASHOR"){
@@ -302,7 +335,7 @@ and open the template in the editor.
                         if($userEvent['monsterType'] === "VILEMAW"){
                             $monsterimage = "vilemaw.png";
                         }
-                        $e = "Killed " . $userEvent['monsterType'] . "<img src='images/".$monsterimage."' />";
+                        $e = "Killed " . $userEvent['monsterType'] . " | <img src='images/".$monsterimage."' />";
                     }
                     if($removeLast === true){
                         echo 'eventList.pop();';
@@ -341,9 +374,23 @@ and open the template in the editor.
                             value = value.replace('{\"', '');
                             value = value.replace('\"}', '');
                             parts = value.split('\":\"');
-                            value = '<div id=\"event'+index+'\" style=\"display: none;\"><div id=\"time\">'+parts[0]+'</div>';
-                            value += '<div id=\"item\">'+parts[1]+'</div>';
-                            value += '</div>'
+                            value = '<div id=\"event'+index+'\" class=\"event\" style=\"display: none;\"><div id=\"time\">'+parts[0]+'</div>';
+                            parts[1] = parts[1].split('|');
+                            var number = parts[1].length;
+                            alert(number);
+                            if(number == 1){
+                                value += parts[1];
+                            }
+                            if(number == 2){
+                                value += '<div id=\"item\">'+parts[1][0]+'</div>'+parts[1][1];
+                            }
+                            if(number == 4){
+                                value += '<div id=\"item\">'+parts[1][0]+parts[1][2]+'</div>'+parts[1][1]+parts[1][3];
+                            }
+                            if(number == 6){
+                                value += '<div id=\"item\">'+parts[1][0]+parts[1][2]+parts[1][4]+'</div>'+parts[1][1]+parts[1][3]+parts[1][5];
+                            }
+                            value += '<div class=\"clear\"></div></div>'
                             console.log(value);
                             console.log(index + \" \" + options.list.length);
 
