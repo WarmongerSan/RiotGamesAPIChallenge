@@ -32,6 +32,7 @@ and open the template in the editor.
             }
             .event > img:not(.endscreen){
                float: right;
+               display: inline-block;
             }
             .clear { clear: both; }
         </style>
@@ -268,8 +269,8 @@ and open the template in the editor.
                                         }
                                     }
                                 }
-                                $e .=  " | into " . $lastitem[$userEvent['timestamp']];
-                                $lastDeleted[$userEvent['timestamp']][] = $items[$userEvent['itemId']]['name'] . " | <img src='images/".$ditemimage."' />";
+                                $e .=  " | into " . $lastitem[$userEvent['timestamp']] . "<img src='images/Into.png' width='64px' height='64px' />";
+                                $lastDeleted[$userEvent['timestamp']][] = $items[$userEvent['itemId']]['name'] . " | <img src='images/".$ditemimage."' /><img src='images/Plus.png' width='64px' height='64px' />";
                                 $removeLast = true;
                             }
                         }
@@ -385,10 +386,10 @@ and open the template in the editor.
                                 value += '<div id=\"item\">'+parts[1][0]+'</div>'+parts[1][1];
                             }
                             if(number == 4){
-                                value += '<div id=\"item\">'+parts[1][0]+parts[1][2]+'</div>'+parts[1][1]+parts[1][3];
+                                value += '<div id=\"item\">'+parts[1][0]+parts[1][2]+'</div>'+parts[1][3]+parts[1][1];
                             }
                             if(number == 6){
-                                value += '<div id=\"item\">'+parts[1][0]+parts[1][2]+parts[1][4]+'</div>'+parts[1][1]+parts[1][3]+parts[1][5];
+                                value += '<div id=\"item\">'+parts[1][0]+parts[1][2]+parts[1][4]+'</div>'+parts[1][5]+parts[1][3]+parts[1][1];
                             }
                             value += '<div class=\"clear\"></div></div>'
                             console.log(value);
