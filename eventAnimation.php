@@ -17,9 +17,14 @@ and open the template in the editor.
                 width: auto;
             }
             .event{
+                width: 100%;
+                border-bottom: 2px solid #000;
+                border-left: 2px solid #000;
+            }
+            #events{
                 width: 50%;
                 margin-left: 25%;
-                border: 2px solid #000;
+                border-top: 2px solid #000;
             }
             #item{
                 padding: 5px;
