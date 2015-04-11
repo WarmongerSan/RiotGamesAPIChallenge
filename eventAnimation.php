@@ -413,7 +413,6 @@ and open the template in the editor.
                             value = '<div id=\"event'+index+'\" class=\"event\" style=\"display: none;\"><div id=\"time\">'+parts[0]+'</div>';
                             parts[1] = parts[1].split('|');
                             var number = parts[1].length;
-                            alert(number);
                             if(number == 1){
                                 value += parts[1];
                             }
