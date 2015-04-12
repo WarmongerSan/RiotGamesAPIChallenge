@@ -11,13 +11,17 @@ and open the template in the editor.
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <title></title>
         <style>
+            h1, h2{
+                margin-bottom: 0;
+                display: inline-block;
+            }
             #championsContainer{
                 width: 75%;
                 margin-left: 12.5%;
             }
             #statsContainer{
-                width: 75%;
-                margin-left: 12.5%;
+                width: 50%;
+                margin-left: 35%;
             }
             #team100{
                 margin-left: 10%;
@@ -40,8 +44,15 @@ and open the template in the editor.
                 text-align: center;
             }
             #champInfo{
-                margin-top: -120px;
+                margin-top: -140px;
                 margin-left: 140px;
+            }
+            #ip{
+                right: 0px;
+                top: 0px;
+            }
+            #champOthers{
+                margin-top: 50px;
             }
         </style>
     </head>
@@ -148,8 +159,8 @@ and open the template in the editor.
                                 <div id='statsContainer'>
                                     <div id='champimage'><img  style='border-radius: 60px; -webkit-border-radius: 60px; -moz-border-radius: 60px;' src='images/".$champion[$match['championId']]['name']."Square.png' /></div>
                                     <div id='champInfo'>
-                                        <div id='champIntro'> ".$champion[$match['championId']]['name']."</div>
-                                        <div id='kda'>".$kda."</div>
+                                        <div id='champIntro'><h1>".$champion[$match['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda . "</div>
+                                        <div id='ip'><img width='14px' src='images/IP.png' /> ".$match['ipEarned']."</div>
                                         <div id='timeDateType'>".date("M, d-Y H:i", $match['createDate']/1000)." | ".str_replace("_", " ", $match['subType'])."</div>
                                         <div style='clear: both;'></div>
                                     </div>
@@ -168,7 +179,6 @@ and open the template in the editor.
                                             <img src='images/".str_replace(" ", "", $summonerSpells[$match['spell2']]['name'])."_sp.png' />
                                         </div>
                                     </div>
-                                    <div id='ip'><img width='14px' src='images/IP.png' /> ".$match['ipEarned']."</div>
                                 </div>
                             ";
                             $MVP = "";
