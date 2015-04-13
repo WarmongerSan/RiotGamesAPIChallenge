@@ -36,8 +36,18 @@ and open the template in the editor.
                 margin-left: 6%;
                 text-align: center;
             }
-            #player img{
+            #championimage{
                 width: 100%;
+            }
+            #mvpimage{
+                position: absolute;
+                width: 50px;
+                margin-left: -25px;
+            }
+            #mvp{
+                width: 75%;
+                margin-left: 12.5%;
+                text-align: center;
             }
             #vs{
                 width: 100%;
@@ -184,6 +194,68 @@ and open the template in the editor.
                             $MVP = "";
                             $matchdetails = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$match['gameId']."?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
                             //var_dump($matchdetails['participants']);
+                            $MostKills = "";
+                            $MostAssists = "";
+                            $MostGold = "";
+                            $MostDamage = "";
+                            $MostWards = "";
+                            $i = 1;
+                            foreach($matchdetails['participants'] as $extraPDetails){
+                                $extraPDetails = get_object_vars($extraPDetails);
+                                $extraPStats = get_object_vars($extraPDetails['stats']);
+                                if($i < 6){
+                                    $currentChampion = "'100-".$extraPDetails['championId']."'";
+                                } elseif($i >= 6){
+                                    $currentChampion = "'200-".$extraPDetails['championId']."'";
+                                }
+                                
+                                $MVPPoints = 0;
+                                $MVPPoints += $extraPStats['totalDamageDealtToChampions'] / 10000;
+                                $MVPPoints += (($extraPStats['kills'] + $extraPStats['assists']) - $extraPStats['deaths']);
+                                $MVPPoints += $extraPStats['totalHeal'] / 500;
+                                $TotalHeal[$currentChampion] = $extraPStats['totalHeal'];
+                                $MostAssists[$currentChampion] = $extraPStats['assists'];
+                                $MostKills[$currentChampion] = $extraPStats['kills'];
+                                $MostDamage[$currentChampion] = $extraPStats['totalDamageDealtToChampions'];
+
+                                if($extraPStats['firstBloodKill'] == true){
+                                $FirstBlood[$currentChampion] = true;
+                                $MVPPoints += 15;
+                                }
+                                if($pStats['firstBloodAssist'] == true){
+                                $FirstBloodAssist[$currentChampion] = true;
+                                $MVPPoints += 10;
+                                }
+                                $MVPPoints += $extraPStats['wardsPlaced'] / 5;
+                                $MVPPoints += $extraPStats['goldEarned'] / 1000;
+                                $MostWards[$currentChampion] = $extraPStats['wardsPlaced'];
+                                $MostGold[$currentChampion] = $extraPStats['goldEarned'];
+                                $MVP[$currentChampion] = $MVPPoints;
+                                $i ++;
+                            }
+                            arsort($MostWards);
+                            arsort($MostWards);
+                            arsort($MostKills);
+                            arsort($MostAssists);
+                            arsort($MostDamage);
+                            print_r($MostWards);
+                            /*echo "<br />";
+                            print_r($MostGold);
+                            echo "<br />";
+                            print_r($MostKills);
+                            echo "<br />";
+                            print_r($MostAssists);
+                            echo "<br />";
+                            print_r($MostDamage);
+                            echo "<br />";*/
+                            //echo array_shift(array_keys($MostWards)) . " " . array_shift($MostWards) . "<br />";
+                            //echo array_shift(array_keys($MostGold)) . " " . array_shift($MostGold) . "<br />";
+                            //echo array_shift(array_keys($MostKills)) . " " . array_shift($MostKills) . "<br />";
+                            //echo array_shift(array_keys($MostAssists)) . " " . array_shift($MostAssists) . "<br />";
+                            //echo array_shift(array_keys($MostDamage)) . " " . array_shift($MostDamage) . "<br />";
+                            arsort($MVP);
+                            //print_r($MVP);
+                            $championMVP = array_shift(array_keys($MVP));
                             echo "<div id='championsContainer'>";
                             $i = 1;
                             foreach($matchdetails['participants'] as $pDetails){
@@ -192,24 +264,24 @@ and open the template in the editor.
                                 }
                                 $pDetails = get_object_vars($pDetails);
                                 $pStats = get_object_vars($pDetails['stats']);
+                                
                                 $eachKda = "<h3>" . $pStats['kills'] . " / " . $pStats['deaths'] . " / " . $pStats['assists'] . "</h2>";
                                 echo "<div id='player'>
-                                    <div id='champImage'><img src='images/".str_replace(" ", "", $champion[$pDetails['championId']]['name'])."Square.png' /></div>
+                                    <div id='champImage'>
+                                        <img id='championImage' src='images/".str_replace(" ", "", $champion[$pDetails['championId']]['name'])."Square.png' />";
+                                        if($i < 6){
+                                            if("'".$pDetails['teamId']."-".$pDetails['championId']."'" == $championMVP){
+                                                echo "<img id='mvpimage' src='images/mvpbadge.png'/>";
+                                            }
+                                        } else{
+                                            if("'".$pDetails['teamId']."-".$pDetails['championId']."'" == $championMVP){
+                                                echo "<img id='mvpimage' src='images/mvpbadge.png'/>";
+                                            }
+                                        } 
+                                echo "</div>
                                     <div id='champKda'>".$eachKda."</div>
                                     </div>";
-                                $MVPPoints = 0;
-                                $MVPPoints += $pStats['totalDamageDealtToChampions'] / 10000;
-                                $MVPPoints += (($pStats['kills'] + $pStats['assists']) - $pStats['deaths']);
-                                $MVPPoints += $pStats['totalHeal'] / 500;
-                                if($pStats['firstBloodKill'] == true){
-                                $MVPPoints += 15;
-                                }
-                                if($pStats['firstBloodAssist'] == true){
-                                $MVPPoints += 10;
-                                }
-                                $MVPPoints += $pStats['wardsPlaced'] / 5;
-                                $MVPPoints += $pStats['goldEarned'] / 1000;
-                                $MVP[$pDetails['championId']] = $MVPPoints;
+                               
                                 if($i == 5){
                                     echo "<div style='clear: both;'></div></div><div id='vs'><h1>VS</h1><br /></div><div id='team200'>";
                                 }
@@ -218,12 +290,26 @@ and open the template in the editor.
                                 }
                                 $i ++;
                             }
-                            arsort($MVP);
-                            //print_r($MVP);
-                            $championMVP = $champion[array_shift(array_keys($MVP))]['name'];
                             echo "<div id='mvp'>
-                                        MVP of the match: ".$championMVP."
-                                  </div></div>";
+                                        <h1>MVP of the match</h1><br />
+                                        <img src='images/".$champion[str_replace("'", "", str_replace("200-", "", str_replace("100-", "", $championMVP)))]['name']."Square.png' />";
+                                        if(array_shift(array_keys($MostKills)) == $championMVP){
+                                            echo "<br />Most kills:" . array_shift($MostKills);
+                                        }
+                                        if(array_shift(array_keys($MostAssists)) == $championMVP){
+                                            echo "<br />Most assists:" . array_shift($MostAssists);
+                                        }
+                                        if(array_shift(array_keys($MostDamage)) == $championMVP){
+                                            echo "<br />Most damage:" . array_shift($MostDamage);
+                                        }
+                                        if(array_shift(array_keys($MostWards)) == $championMVP){
+                                            echo "<br />Most wards placed:" . array_shift($MostWards);
+                                        }
+                                        if(array_shift(array_keys($MostGold)) == $championMVP){
+                                            echo "<br />Most gold:" . array_shift($MostGold);
+                                        }
+                            echo "</div>
+                                  </div>";
                             echo "<br /><br />";
                             //}
                         }
