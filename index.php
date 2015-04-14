@@ -238,7 +238,7 @@ and open the template in the editor.
                             arsort($MostKills);
                             arsort($MostAssists);
                             arsort($MostDamage);
-                            print_r($MostWards);
+                            //print_r($MostWards);
                             /*echo "<br />";
                             print_r($MostGold);
                             echo "<br />";
@@ -268,7 +268,7 @@ and open the template in the editor.
                                 $eachKda = "<h3>" . $pStats['kills'] . " / " . $pStats['deaths'] . " / " . $pStats['assists'] . "</h2>";
                                 echo "<div id='player'>
                                     <div id='champImage'>
-                                        <img id='championImage' src='images/".str_replace(" ", "", $champion[$pDetails['championId']]['name'])."Square.png' />";
+                                        <img id='championImage' src='images/".str_replace("'", "", str_replace(" ", "", $champion[$pDetails['championId']]['name']))."Square.png' />";
                                         if($i < 6){
                                             if("'".$pDetails['teamId']."-".$pDetails['championId']."'" == $championMVP){
                                                 echo "<img id='mvpimage' src='images/mvpbadge.png'/>";
