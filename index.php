@@ -172,7 +172,7 @@ and open the template in the editor.
                                     }
                                 }
                             }
-                            echo $LastBootsBought;
+                            //echo $LastBootsBought;
 
                             //if($match['queueType'] === "URF_5x5"){
                             $matchItems = "";
@@ -183,7 +183,7 @@ and open the template in the editor.
                             $matchItems[] = $stats['item4'];
                             $matchItems[] = $stats['item5'];
                             $matchItems[] = $stats['item6'];
-                            var_dump($matchItems);
+                            //var_dump($matchItems);
                             for($i = 0; $i < 7; $i ++){
                                 $itemimagename[$i] = str_replace("'", "", $items[$matchItems[$i]]['name']);
                                 if(!array_key_exists('item0', $stats)) { $matchItem[0] = 'DefaultItem.gif'; }
