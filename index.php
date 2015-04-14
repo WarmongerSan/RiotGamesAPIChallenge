@@ -167,7 +167,7 @@ and open the template in the editor.
                             $kda = "<h2>" . $stats['championsKilled'] . " / " . $stats['numDeaths'] . " / " . $stats['assists'] . "</h2>";
                             echo "
                                 <div id='statsContainer'>
-                                    <div id='champimage'><img  style='border-radius: 60px; -webkit-border-radius: 60px; -moz-border-radius: 60px;' src='images/".$champion[$match['championId']]['name']."Square.png' /></div>
+                                    <div id='champimage'><img  style='border-radius: 60px; -webkit-border-radius: 60px; -moz-border-radius: 60px;' src='images/".str_replace("'", "", $champion[$match['championId']]['name'])."Square.png' /></div>
                                     <div id='champInfo'>
                                         <div id='champIntro'><h1>".$champion[$match['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda . "</div>
                                         <div id='ip'><img width='14px' src='images/IP.png' /> ".$match['ipEarned']."</div>
