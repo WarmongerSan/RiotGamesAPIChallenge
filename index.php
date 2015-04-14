@@ -106,6 +106,9 @@ and open the template in the editor.
                     }
                     }
                 }
+            //krsort($items);
+            //var_dump($items);
+            //echo "<br /><br />";
                 
                 $summonerspells = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/euw/v1.2/summoner-spell?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
                 foreach($summonerspells['data'] as $s_spells){
@@ -127,6 +130,50 @@ and open the template in the editor.
                         foreach($matches as $match){
                             $match = get_object_vars($match);
                             $stats = get_object_vars($match['stats']);
+                            $matchdetails = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$match['gameId']."?includeTimeline=true&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                            //var_dump($matchdetails);
+                            foreach($matchdetails['participants'] AS $eachParticipant){
+                                if(get_object_vars($eachParticipant)['championId'] == $match['championId']){
+                                    $SearchedParticipantId = get_object_vars($eachParticipant)['participantId'];
+                                }
+                            }
+                            $match_timeline = get_object_vars($matchdetails['timeline']);
+                            foreach($match_timeline['frames'] as $frames){
+                                //FRAMES
+                                foreach(get_object_vars($frames) as $timestamps => $name){
+                                    if(is_object($name)){
+                                        //TIMESTAMPS
+                                        $name = get_object_vars($name);
+                                    }
+                                    if($timestamps === 'events'){
+                                        foreach($name as $timestamp){
+                                            //EACH TIMESTAMP
+                                            $timestamp = get_object_vars($timestamp);
+                                            if(isset($timestamp['participantId'])){
+                                                if($timestamp['participantId'] === $SearchedParticipantId){
+                                                $events[$timestamp['participantId']][] = $timestamp;
+                                                }
+                                            } elseif(isset($timestamp['killerId'])){
+                                                if($timestamp['killerId'] === $SearchedParticipantId){
+                                                $events[$timestamp['killerId']][] = $timestamp;
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                            foreach($events as $userEvents){
+                                foreach($userEvents as $userEvent){
+                                    if($userEvent['eventType'] === "ITEM_PURCHASED"){
+                                       //$itemimagename = str_replace("'", "", $items[$userEvent['itemId']]['name']);
+                                       if($items[$userEvent['itemId']]['name'] == "Boots of Swiftness" || $items[$userEvent['itemId']]['name'] == "Boots of Mobility" || $items[$userEvent['itemId']]['name'] == "Berserker's Greaves" || $items[$userEvent['itemId']]['name'] == "Ionian Boots of Lucidity" || $items[$userEvent['itemId']]['name'] == "Mercury's Treads" || $items[$userEvent['itemId']]['name'] == "Ninja Tabi" || $items[$userEvent['itemId']]['name'] == "Sorcerer's Shoes"){
+                                           $LastBootsBought = $items[$userEvent['itemId']]['name'];
+                                       }
+                                    }
+                                }
+                            }
+                            echo $LastBootsBought;
+
                             //if($match['queueType'] === "URF_5x5"){
                             $matchItems = "";
                             $matchItems[] = $stats['item0'];
@@ -136,6 +183,7 @@ and open the template in the editor.
                             $matchItems[] = $stats['item4'];
                             $matchItems[] = $stats['item5'];
                             $matchItems[] = $stats['item6'];
+                            var_dump($matchItems);
                             for($i = 0; $i < 7; $i ++){
                                 $itemimagename[$i] = str_replace("'", "", $items[$matchItems[$i]]['name']);
                                 if(!array_key_exists('item0', $stats)) { $matchItem[0] = 'DefaultItem.gif'; }
@@ -150,7 +198,7 @@ and open the template in the editor.
                                     $matchItem[$i] = str_replace(" ", "_", $itemimagename[$i]).".jpg";
                                 } elseif(strpos($itemimagename[$i], "Enchantment: ") !== false){
                                     $itemimagename[$i] = str_replace("Enchantment: ", "", $itemimagename[$i]);
-                                    $matchItem[$i] = str_replace(" ", "_", $itemimagename[$i]).".png";
+                                    $matchItem[$i] = str_replace(" ", "_", str_replace("'", "", $LastBootsBought)).'_'.str_replace(" ", "_", $itemimagename[$i]).".png";
                                 } elseif ($itemimagename[$i] === "Targons Brace" || $itemimagename[$i] === "Frostfang"){
                                     $matchItem[$i] = str_replace(" ", "_", $itemimagename[$i]).".jpg";
                                 } else {
@@ -192,7 +240,6 @@ and open the template in the editor.
                                 </div>
                             ";
                             $MVP = "";
-                            $matchdetails = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$match['gameId']."?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
                             //var_dump($matchdetails['participants']);
                             $MostKills = "";
                             $MostAssists = "";
