@@ -169,11 +169,14 @@ and open the template in the editor.
                                        if($items[$userEvent['itemId']]['name'] == "Boots of Swiftness" || $items[$userEvent['itemId']]['name'] == "Boots of Mobility" || $items[$userEvent['itemId']]['name'] == "Berserker's Greaves" || $items[$userEvent['itemId']]['name'] == "Ionian Boots of Lucidity" || $items[$userEvent['itemId']]['name'] == "Mercury's Treads" || $items[$userEvent['itemId']]['name'] == "Ninja Tabi" || $items[$userEvent['itemId']]['name'] == "Sorcerer's Shoes"){
                                            $LastBootsBought = $items[$userEvent['itemId']]['name'];
                                        }
+                                       if($items[$userEvent['itemId']]['name'] == "Poacher's Knife" || $items[$userEvent['itemId']]['name'] == "Skirmisher's Sabre" || $items[$userEvent['itemId']]['name'] == "Stalker's Blade" || $items[$userEvent['itemId']]['name'] == "Ranger's Trailblazer"){
+                                           $LastJungleItemBought = $items[$userEvent['itemId']]['name'];
+                                       }
                                     }
                                 }
                             }
                             //echo $LastBootsBought;
-
+                            echo $LastJungleItemBought;
                             //if($match['queueType'] === "URF_5x5"){
                             $matchItems = "";
                             $matchItems[] = $stats['item0'];
@@ -197,8 +200,12 @@ and open the template in the editor.
                                     $itemimagename[$i] = str_replace(" (Trinket)", "", $itemimagename[$i]);
                                     $matchItem[$i] = str_replace(" ", "_", $itemimagename[$i]).".jpg";
                                 } elseif(strpos($itemimagename[$i], "Enchantment: ") !== false){
-                                    $itemimagename[$i] = str_replace("Enchantment: ", "", $itemimagename[$i]);
-                                    $matchItem[$i] = str_replace(" ", "_", str_replace("'", "", $LastBootsBought)).'_'.str_replace(" ", "_", $itemimagename[$i]).".png";
+                                    $itemimagename[$i] = str_replace(")", "", str_replace("(", "", str_replace("Enchantment: ", "", $itemimagename[$i])));
+                                    if($itemimagename[$i] == "Devourer" || $itemimagename[$i] == "Warrior" || $itemimagename[$i] == "Cinderhulk" || $itemimagename[$i] == "Magus"){
+                                        $matchItem[$i] = str_replace(" ", "_", str_replace("'", "", $LastJungleItemBought)).'_'.str_replace(" ", "_", $itemimagename[$i]).".png";
+                                    } elseif($itemimagename[$i] == "Alacrity" || $itemimagename[$i] == "Homeguard" || $itemimagename[$i] == "Furor" || $itemimagename[$i] == "Captain" || $itemimagename[$i] == "Distortion"){
+                                        $matchItem[$i] = str_replace(" ", "_", str_replace("'", "", $LastBootsBought)).'_'.str_replace(" ", "_", $itemimagename[$i]).".png";
+                                    }
                                 } elseif ($itemimagename[$i] === "Targons Brace" || $itemimagename[$i] === "Frostfang"){
                                     $matchItem[$i] = str_replace(" ", "_", $itemimagename[$i]).".jpg";
                                 } else {
