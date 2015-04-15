@@ -206,7 +206,7 @@ and open the template in the editor.
                             $matchItems[] = $stats['item5'];
                             $matchItems[] = $stats['item6'];
                             //var_dump($matchItems);
-                            for($i = 0; $i < 7; $i ++){
+                            for($i = 0; $i < 8; $i ++){
                                 $itemimagename[$i] = str_replace("'", "", $items[$matchItems[$i]]['name']);
                                 if(!array_key_exists('item0', $stats)) { $matchItem[0] = 'DefaultItem.gif'; }
                                 if(!array_key_exists('item1', $stats)) { $matchItem[1] = 'DefaultItem.gif'; }
@@ -239,9 +239,10 @@ and open the template in the editor.
                             if(!array_key_exists('championsKilled', $stats)) { $stats['championsKilled'] = 0; }
                             if(!array_key_exists('numDeaths', $stats)) { $stats['numDeaths'] = 0; }
                             $kda = "<h2>" . $stats['championsKilled'] . " / " . $stats['numDeaths'] . " / " . $stats['assists'] . "</h2>";
-                            echo "<div id='container' class='entry-content clearfix'>
+                            echo "<div id='container'>
+                                <hr width='50%'>
                                 <div id='statsContainer'>
-                                    <div id='champimage'><img  style='border-radius: 60px; -webkit-border-radius: 60px; -moz-border-radius: 60px;' src='images/".str_replace("'", "", $champion[$match['championId']]['name'])."Square.png' /></div>
+                                    <div id='champimage'><img  style='border-radius: 60px; -webkit-border-radius: 60px; -moz-border-radius: 60px;' src='images/".str_replace(" ", "", str_replace("'", "", $champion[$match['championId']]['name']))."Square.png' /></div>
                                     <div id='champInfo'>";
                                         if($stats['win'] == true){
                                             echo "<div id='champIntro' class='victory'><h1>".$champion[$match['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda . "</div>";
