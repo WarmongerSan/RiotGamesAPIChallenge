@@ -10,6 +10,14 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <title></title>
+        <script type="text/javascript">
+            function viewChampions(that){
+                $(that).parent().siblings('#championsContainer').css("display", "block").animate({
+                                                                        marginTop: "0px",
+                                                                        opacity: 1
+                                                                      }, 3000 );
+            }
+        </script>
         <style>
             h1, h2{
                 margin-bottom: 0;
@@ -18,6 +26,10 @@ and open the template in the editor.
             #championsContainer{
                 width: 75%;
                 margin-left: 12.5%;
+                display: none;
+                opacity: 0;
+                margin-top: -1000px;
+                z-index: -1;
             }
             #statsContainer{
                 width: 50%;
@@ -47,6 +59,7 @@ and open the template in the editor.
             #mvp{
                 width: 75%;
                 margin-left: 12.5%;
+                margin-top: -75px;
                 text-align: center;
             }
             #vs{
@@ -220,7 +233,7 @@ and open the template in the editor.
                             if(!array_key_exists('championsKilled', $stats)) { $stats['championsKilled'] = 0; }
                             if(!array_key_exists('numDeaths', $stats)) { $stats['numDeaths'] = 0; }
                             $kda = "<h2>" . $stats['championsKilled'] . " / " . $stats['numDeaths'] . " / " . $stats['assists'] . "</h2>";
-                            echo "
+                            echo "<div id='container' class='entry-content clearfix'>
                                 <div id='statsContainer'>
                                     <div id='champimage'><img  style='border-radius: 60px; -webkit-border-radius: 60px; -moz-border-radius: 60px;' src='images/".str_replace("'", "", $champion[$match['championId']]['name'])."Square.png' /></div>
                                     <div id='champInfo'>
@@ -244,6 +257,7 @@ and open the template in the editor.
                                             <img src='images/".str_replace(" ", "", $summonerSpells[$match['spell2']]['name'])."_sp.png' />
                                         </div>
                                     </div>
+                                    <button id='readMore' onclick='viewChampions(this)'>Read more!</button>
                                 </div>
                             ";
                             $MVP = "";
@@ -363,6 +377,7 @@ and open the template in the editor.
                                             echo "<br />Most gold:" . array_shift($MostGold);
                                         }
                             echo "</div>
+                                  </div>
                                   </div>";
                             echo "<br /><br />";
                             //}
