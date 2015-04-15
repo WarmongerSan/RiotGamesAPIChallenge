@@ -77,6 +77,12 @@ and open the template in the editor.
             #champOthers{
                 margin-top: 50px;
             }
+            .defeat{
+                color: red;
+            }
+            .victory{
+                color: green;
+            }
         </style>
     </head>
     <body>
@@ -189,7 +195,7 @@ and open the template in the editor.
                                 }
                             }
                             //echo $LastBootsBought;
-                            echo $LastJungleItemBought;
+                            //echo $LastJungleItemBought;
                             //if($match['queueType'] === "URF_5x5"){
                             $matchItems = "";
                             $matchItems[] = $stats['item0'];
@@ -236,9 +242,13 @@ and open the template in the editor.
                             echo "<div id='container' class='entry-content clearfix'>
                                 <div id='statsContainer'>
                                     <div id='champimage'><img  style='border-radius: 60px; -webkit-border-radius: 60px; -moz-border-radius: 60px;' src='images/".str_replace("'", "", $champion[$match['championId']]['name'])."Square.png' /></div>
-                                    <div id='champInfo'>
-                                        <div id='champIntro'><h1>".$champion[$match['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda . "</div>
-                                        <div id='ip'><img width='14px' src='images/IP.png' /> ".$match['ipEarned']."</div>
+                                    <div id='champInfo'>";
+                                        if($stats['win'] == true){
+                                            echo "<div id='champIntro' class='victory'><h1>".$champion[$match['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda . "</div>";
+                                        } else {
+                                            echo "<div id='champIntro' class='defeat'><h1>".$champion[$match['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda . "</div>";  
+                                        }
+                                  echo "<div id='ip'><img width='14px' src='images/IP.png' /> ".$match['ipEarned']."</div>
                                         <div id='timeDateType'>".date("M, d-Y H:i", $match['createDate']/1000)." | ".str_replace("_", " ", $match['subType'])."</div>
                                         <div style='clear: both;'></div>
                                     </div>
