@@ -1,5 +1,6 @@
 <html>
     <head>
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <link rel='stylesheet' id='cntctfrm_form_style-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/contact-form-plugin/css/form_style.css?ver=4.1.1' type='text/css' media='all' />
@@ -10,6 +11,79 @@
         <link rel='stylesheet' id='google_fonts-css'  href='//fonts.googleapis.com/css?family=PT+Sans%3A400%2C700italic%2C700%2C400italic&#038;ver=4.1.1' type='text/css' media='all' />
         <link rel='stylesheet' id='wptt_front-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/wp-twitter-feeds/css/admin_style.min.css?ver=4.1.1' type='text/css' media='all' />
         <link rel='stylesheet' id='jetpack_css-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/jetpack/css/jetpack.css?ver=3.4.1' type='text/css' media='all' />
+        <style>
+            #container{
+                width: 100%;
+            }
+            #statscontainer{
+                position: relative;
+                width: 50%;
+                min-width: 250px;
+                height: 350px;
+                overflow-y: scroll;
+                margin-left: 25px;
+                margin-top: 25px;
+            }
+            #statscontainer div:not(#timeDateType){
+                float: left;
+                padding: 10px;
+            }
+            #timeDateType{
+                margin-top: 110px;
+            }
+            #champOthers{
+                margin-top: -20px;
+            }
+            #pagerContainer{
+                width: 80%;
+                margin-left: 10%;
+                margin-top: 10px;
+            }
+            .defeat{
+                color: red;
+            }
+            .victory{
+                color: green;
+            }
+            #endStatus{
+                margin-left: 25px;
+                width: 50%;
+                min-width: 250px;
+                font-size: 5em;
+                margin-top: 25px;
+                text-align: center;
+            }
+            body{
+                background-color: white !important;
+            }
+        </style>
+        <script>
+            function Next(){
+                $("body").find("#container:visible").addClass('prev').fadeOut( function() {
+                    if($("body").find(".prev").next('#container').length >= 1){
+                        $("body").find(".prev").next('#container').fadeIn();
+                        $("body").find(".prev").removeClass('prev');
+                    } else {
+                        $("body").find("#container:first").fadeIn();
+                        $("body").find(".prev").removeClass('prev');
+                    }
+                });
+                //if($("body").find("#container:visible").length > 1){
+                //    $("body").find("#container:visible:first").css("display", "none");
+                //}
+            }
+            function Previous(){
+                $("body").find("#container:visible").addClass('prev').fadeOut( function() {
+                    if($("body").find(".prev").prev('#container').length >= 1){
+                        $("body").find(".prev").prev('#container').fadeIn();
+                        $("body").find(".prev").removeClass('prev');
+                    } else {
+                        $("body").find("#container:hidden:last").fadeIn();
+                        $("body").find(".prev").removeClass('prev');
+                    }
+                });
+            }
+        </script>
     </head>
     <body>
         <header id="branding" >
@@ -55,9 +129,17 @@
           <!-- .hgroup-wrap -->
 
           </header>
+    <div id='pagerContainer'> 
+        <form action="" method="post">
+            <ul class="pager">
+                <li class="previous"><a href="#" onclick="javascript: Previous();">Previous Player</a></li>
+                <li class="next"><a href="#" onclick="javascript: Next();">Next Player</a></li>
+            </ul>
+        </form>
+    </div>
 <?php
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
-    
+    //echo $_POST['summonerId'];
     $staticchampdata = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=spells&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
     foreach($staticchampdata as $champdata){
         if(is_object($champdata)){
@@ -103,6 +185,11 @@
     
     $matchdetails = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$_POST['gameId']."?includeTimeline=true&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
     //var_dump($matchdetails);
+    foreach($matchdetails['teams'] as $teams){
+        $teams = get_object_vars($teams);
+        $team[] = $teams;
+    }
+    
     foreach($matchdetails['participants'] AS $eachParticipant){
         if(is_object($eachParticipant)){
             $eachParticipant = get_object_vars($eachParticipant);
@@ -185,17 +272,31 @@
         if(!array_key_exists('kills', $stats)) { $stats['kills'] = 0; }
         if(!array_key_exists('deaths', $stats)) { $stats['deaths'] = 0; }
         $kda[$eachParticipant['participantId']] = "<h2>" . $stats['kills'] . " / " . $stats['deaths'] . " / " . $stats['assists'] . "</h2>";
-        echo "  <div id='container' class='jumbotron'>
-                <hr width='50%'>
-                <div id='statsContainer'>
+        if($eachParticipant['participantId'] == $_POST['summonerId']){
+            echo "  <div id='container'>";
+        } else {
+            echo "  <div id='container'style='display: none;'>";
+        }
+        echo "<div id='endStatus' class='jumbotron'>";
+        if($eachParticipant['participantId'] < 6){
+            if($team[0]['winner'] == 1){
+                echo "<span class='victory'>Victory</span>";
+            } else {
+                echo "<span class='defeat'>Defeat</span>";
+            }
+        }
+        if($eachParticipant['participantId'] >= 6){
+            if($team[1]['winner'] == 1){
+                echo "<span class='victory'>Victory</span>";
+            } else {
+                echo "<span class='defeat'>Defeat</span>";
+            }
+        }
+        echo "</div>
+                <div id='statsContainer' class='jumbotron'>
                     <div id='champimage'><img  style='border-radius: 60px; -webkit-border-radius: 60px; -moz-border-radius: 60px;' src='images/".str_replace(" ", "", str_replace("'", "", $champion[$eachParticipant['championId']]['name']))."Square.png' /></div>
-                    <div id='champInfo'>";
-                        if($stats['win'] == true){
-                            echo "<div id='champIntro' class='victory'><h1>".$champion[$eachParticipant['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda[$eachParticipant['participantId']] . "</div>";
-                        } else {
-                            echo "<div id='champIntro' class='defeat'><h1>".$champion[$eachParticipant['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda[$eachParticipant['participantId']] . "</div>";  
-                        }
-                  echo "<div id='ip'><img width='14px' src='images/IP.png' /> ".$_POST['ipEarned']."</div>
+                    <div id='champInfo'>
+                        <div id='champIntro'><h1>".$champion[$eachParticipant['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda[$eachParticipant['participantId']] . "</div>
                         <div id='timeDateType'>".date('i', $matchdetails['matchDuration'])."m , ".date("M, d-Y H:i", $matchdetails['matchCreation']/1000)." | ".str_replace("_", " ", $matchdetails['queueType'])."</div>
                         <div style='clear: both;'></div>
                     </div>
@@ -214,10 +315,24 @@
                             <img src='images/".str_replace(" ", "", $summonerSpells[$eachParticipant['spell2Id']]['name'])."_sp.png' />
                         </div>
                     </div>
-                </div>
-                </div>
+                    </div>
+                    </div>
             ";
     }
     ?>
+    <form id="nextForm">
+        <input type='hidden' name='server' value='<?php echo $_POST['server'] ?>' />
+        <input type='hidden' name='gameId' value='<?php echo $_POST['gameId'] ?>' />
+        <input type='hidden' name='championId' value='<?php echo $_POST['championId'] ?>' />
+        <input type='hidden' name='ipEarned' value='<?php echo $_POST['ipEarned'] ?>' />
+        <input type='hidden' name='summonerId' value='<?php echo ($_POST['summonerId']+1) ?>' />                    
+    </form>
+    <form id="previousForm">
+        <input type='hidden' name='server' value='<?php echo $_POST['server'] ?>' />
+        <input type='hidden' name='gameId' value='<?php echo $_POST['gameId'] ?>' />
+        <input type='hidden' name='championId' value='<?php echo $_POST['championId'] ?>' />
+        <input type='hidden' name='ipEarned' value='<?php echo $_POST['ipEarned'] ?>' />
+        <input type='hidden' name='summonerId' value='<?php echo ($_POST['summonerId']+1) ?>' />                    
+    </form>
     </body>
 </html>
