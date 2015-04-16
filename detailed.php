@@ -15,8 +15,11 @@
             #container{
                 width: 100%;
             }
+            #container div{
+                vertical-align: top;
+            }
             #statscontainer{
-                position: relative;
+                float: left;
                 width: 50%;
                 min-width: 250px;
                 height: 350px;
@@ -46,8 +49,8 @@
                 color: green;
             }
             #endStatus{
-                margin-left: 25px;
-                width: 50%;
+                float: left;
+                width: 100%;
                 min-width: 250px;
                 font-size: 5em;
                 margin-top: 25px;
@@ -55,6 +58,18 @@
             }
             body{
                 background-color: white !important;
+            }
+            #extraStats{
+                float: right;
+                width: 45%;
+                margin-right: 25px;
+                margin-top: 25px;
+                padding: 10px;
+            }
+            #mvpimage{
+                position: absolute;
+                width: 50px;
+                margin-left: -50px;
             }
         </style>
         <script>
@@ -222,6 +237,8 @@
                 }
             }
         }
+        $dragon = 0;
+        $baron = 0;
         foreach($events as $userEvents){
             foreach($userEvents as $userEvent){
                 if($userEvent['eventType'] === "ITEM_PURCHASED"){
@@ -232,6 +249,12 @@
                    if($items[$userEvent['itemId']]['name'] == "Poacher's Knife" || $items[$userEvent['itemId']]['name'] == "Skirmisher's Sabre" || $items[$userEvent['itemId']]['name'] == "Stalker's Blade" || $items[$userEvent['itemId']]['name'] == "Ranger's Trailblazer"){
                        $LastJungleItemBought = $items[$userEvent['itemId']]['name'];
                    }
+                }
+                if($userEvent['eventType'] === "DRAGON_KILL"){
+                    $dragon += 1;
+                }
+                if($userEvent['eventType'] === "DRAGON_KILL"){
+                    $baron += 1;
                 }
             }
         }
@@ -279,6 +302,7 @@
         }
         echo "<div id='endStatus' class='jumbotron'>";
         if($eachParticipant['participantId'] < 6){
+            $pTeam = '100';
             if($team[0]['winner'] == 1){
                 echo "<span class='victory'>Victory</span>";
             } else {
@@ -286,6 +310,7 @@
             }
         }
         if($eachParticipant['participantId'] >= 6){
+            $pTeam = '200';
             if($team[1]['winner'] == 1){
                 echo "<span class='victory'>Victory</span>";
             } else {
@@ -295,8 +320,11 @@
         echo "</div>
                 <div id='statsContainer' class='jumbotron'>
                     <div id='champimage'><img  style='border-radius: 60px; -webkit-border-radius: 60px; -moz-border-radius: 60px;' src='images/".str_replace(" ", "", str_replace("'", "", $champion[$eachParticipant['championId']]['name']))."Square.png' /></div>
-                    <div id='champInfo'>
-                        <div id='champIntro'><h1>".$champion[$eachParticipant['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda[$eachParticipant['participantId']] . "</div>
+                    <div id='champInfo'>";
+                  if(str_replace(" ", "", str_replace("'", "", $champion[$eachParticipant['championId']]['name'])) == $_POST['mvp']){
+                      echo "<img id='mvpimage' src='images/mvpbadge.png' />";
+                  }
+                  echo "<div id='champIntro'><h1>".$champion[$eachParticipant['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda[$eachParticipant['participantId']] . "</div>
                         <div id='timeDateType'>".date('i', $matchdetails['matchDuration'])."m , ".date("M, d-Y H:i", $matchdetails['matchCreation']/1000)." | ".str_replace("_", " ", $matchdetails['queueType'])."</div>
                         <div style='clear: both;'></div>
                     </div>
@@ -316,7 +344,32 @@
                         </div>
                     </div>
                     </div>
+                    <div id='extraStats' class='jumbotron'>
+                        <table class='table table-striped'>
+                        <tr><th colspan='2'>Kills</th></tr>
+                        <tr><td>Champions</td><td>".get_object_vars($eachParticipant['stats'])['kills']."</td></tr>
+                        <tr><td>Minions</td><td>".get_object_vars($eachParticipant['stats'])['minionsKilled']."</td></tr>
+                        <tr><td>Turrets</td><td>".get_object_vars($eachParticipant['stats'])['towerKills']."</td></tr>
+                        <tr><td>Inhibitors</td><td>".get_object_vars($eachParticipant['stats'])['inhibitorKills']."</td></tr>
+                        <tr><td>Dragons</td><td>".$dragon."</td></tr>
+                        <tr><td>Barons</td><td>".$baron."</td></tr>
+                        <tr><th colspan='2'>Damage</th></tr>
+                        <tr><td>Physical damage dealt</td><td>".get_object_vars($eachParticipant['stats'])['physicalDamageDealt']."</td></tr>
+                        <tr><td>Magical damage dealt</td><td>".get_object_vars($eachParticipant['stats'])['magicDamageDealt']."</td></tr>
+                        <tr><td>True damage dealt</td><td>".get_object_vars($eachParticipant['stats'])['trueDamageDealt']."</td></tr>
+                        <tr><td>Total damage dealt</td><td>".get_object_vars($eachParticipant['stats'])['totalDamageDealt']."</td></tr>
+                        <tr><td>Physical damage taken</td><td>".get_object_vars($eachParticipant['stats'])['physicalDamageTaken']."</td></tr>
+                        <tr><td>Magical damage taken</td><td>".get_object_vars($eachParticipant['stats'])['magicDamageTaken']."</td></tr>
+                        <tr><td>True damage taken</td><td>".get_object_vars($eachParticipant['stats'])['trueDamageTaken']."</td></tr>
+                        <tr><td>Total damage taken</td><td>".get_object_vars($eachParticipant['stats'])['totalDamageTaken']."</td></tr>
+                        <tr><th colspan='2'>Wards</th></tr>
+                        <tr><td>Wards placed</td><td>".get_object_vars($eachParticipant['stats'])['wardsPlaced']."</td></tr>
+                        <tr><td>Wards killed</td><td>".get_object_vars($eachParticipant['stats'])['wardsKilled']."</td></tr>
+                        <tr><td>Sight Wards bought</td><td>".get_object_vars($eachParticipant['stats'])['sightWardsBoughtInGame']."</td></tr>
+                        <tr><td>Vision Wards bought</td><td>".get_object_vars($eachParticipant['stats'])['visionWardsBoughtInGame']."</td></tr>
+                    </table>
                     </div>
+                </div>
             ";
     }
     ?>

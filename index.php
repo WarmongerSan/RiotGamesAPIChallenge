@@ -465,6 +465,7 @@ and open the template in the editor.
                                   <input type='hidden' name='championId' value='".$match['championId']."' />
                                   <input type='hidden' name='ipEarned' value='".$match['ipEarned']."' />
                                   <input type='hidden' name='summonerId' value='".$SearchedParticipantId."' />
+                                  <input type='hidden' name='mvp' value='".$champion[str_replace("'", "", str_replace("200-", "", str_replace("100-", "", $championMVP)))]['name']."' />
                                   </form>
                                   </div>
                                   <div style='clear: both;'></div>
