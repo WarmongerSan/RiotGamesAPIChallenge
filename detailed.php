@@ -148,6 +148,8 @@
         <form action="" method="post">
             <ul class="pager">
                 <li class="previous"><a href="#" onclick="javascript: Previous();">Previous Player</a></li>
+                <li class="team100"><a href="#" onclick="javascript: Team100();">Blue Team</a></li>
+                <li class="team200"><a href="#" onclick="javascript: Team200();">Purple Team</a></li>
                 <li class="next"><a href="#" onclick="javascript: Next();">Next Player</a></li>
             </ul>
         </form>
@@ -232,7 +234,7 @@
                             if($timestamp['killerId'] === $eachParticipant['participantId']){
                             $events[$timestamp['killerId']][] = $timestamp;
                             }
-                        } 
+                        }
                     }
                 }
             }
@@ -241,20 +243,22 @@
         $baron = 0;
         foreach($events as $userEvents){
             foreach($userEvents as $userEvent){
-                if($userEvent['eventType'] === "ITEM_PURCHASED"){
-                   //$itemimagename = str_replace("'", "", $items[$userEvent['itemId']]['name']);
-                   if($items[$userEvent['itemId']]['name'] == "Boots of Swiftness" || $items[$userEvent['itemId']]['name'] == "Boots of Mobility" || $items[$userEvent['itemId']]['name'] == "Berserker's Greaves" || $items[$userEvent['itemId']]['name'] == "Ionian Boots of Lucidity" || $items[$userEvent['itemId']]['name'] == "Mercury's Treads" || $items[$userEvent['itemId']]['name'] == "Ninja Tabi" || $items[$userEvent['itemId']]['name'] == "Sorcerer's Shoes"){
-                       $LastBootsBought = $items[$userEvent['itemId']]['name'];
-                   }
-                   if($items[$userEvent['itemId']]['name'] == "Poacher's Knife" || $items[$userEvent['itemId']]['name'] == "Skirmisher's Sabre" || $items[$userEvent['itemId']]['name'] == "Stalker's Blade" || $items[$userEvent['itemId']]['name'] == "Ranger's Trailblazer"){
-                       $LastJungleItemBought = $items[$userEvent['itemId']]['name'];
-                   }
-                }
-                if($userEvent['eventType'] === "DRAGON_KILL"){
-                    $dragon += 1;
-                }
-                if($userEvent['eventType'] === "DRAGON_KILL"){
-                    $baron += 1;
+                if($userEvent['participantId'] == $eachParticipant['participantId'] || $userEvent['killerId'] == $eachParticipant['participantId']){    
+                    if($userEvent['eventType'] === "ITEM_PURCHASED"){
+                       //$itemimagename = str_replace("'", "", $items[$userEvent['itemId']]['name']);
+                       if($items[$userEvent['itemId']]['name'] == "Boots of Swiftness" || $items[$userEvent['itemId']]['name'] == "Boots of Mobility" || $items[$userEvent['itemId']]['name'] == "Berserker's Greaves" || $items[$userEvent['itemId']]['name'] == "Ionian Boots of Lucidity" || $items[$userEvent['itemId']]['name'] == "Mercury's Treads" || $items[$userEvent['itemId']]['name'] == "Ninja Tabi" || $items[$userEvent['itemId']]['name'] == "Sorcerer's Shoes"){
+                           $LastBootsBought = $items[$userEvent['itemId']]['name'];
+                       }
+                       if($items[$userEvent['itemId']]['name'] == "Poacher's Knife" || $items[$userEvent['itemId']]['name'] == "Skirmisher's Sabre" || $items[$userEvent['itemId']]['name'] == "Stalker's Blade" || $items[$userEvent['itemId']]['name'] == "Ranger's Trailblazer"){
+                           $LastJungleItemBought = $items[$userEvent['itemId']]['name'];
+                       }
+                    }
+                    if($userEvent['eventType'] === "DRAGON_KILL"){
+                        $dragon += 1;
+                    }
+                    if($userEvent['eventType'] === "BARON_KILL"){
+                        $baron += 1;
+                    }
                 }
             }
         }
