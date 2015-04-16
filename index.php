@@ -10,6 +10,14 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <title></title>
+        <link rel='stylesheet' id='cntctfrm_form_style-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/contact-form-plugin/css/form_style.css?ver=4.1.1' type='text/css' media='all' />
+        <link rel='stylesheet' id='db_twitter_feed-default-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/devbuddy-twitter-feed/assets/feed.css?ver=2.2' type='text/css' media='all' />
+        <link rel='stylesheet' id='wspsc-style-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/wordpress-simple-paypal-shopping-cart/wp_shopping_cart_style.css?ver=4.0.7' type='text/css' media='all' />
+        <link rel='stylesheet' id='interface_style-css'  href='http://www.lolhistoryapp.com/wp-content/themes/interface/style.css?ver=4.1.1' type='text/css' media='all' />
+        <link rel='stylesheet' id='interface-responsive-css'  href='http://www.lolhistoryapp.com/wp-content/themes/interface/css/responsive.css?ver=4.1.1' type='text/css' media='all' />
+        <link rel='stylesheet' id='google_fonts-css'  href='//fonts.googleapis.com/css?family=PT+Sans%3A400%2C700italic%2C700%2C400italic&#038;ver=4.1.1' type='text/css' media='all' />
+        <link rel='stylesheet' id='wptt_front-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/wp-twitter-feeds/css/admin_style.min.css?ver=4.1.1' type='text/css' media='all' />
+        <link rel='stylesheet' id='jetpack_css-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/jetpack/css/jetpack.css?ver=3.4.1' type='text/css' media='all' />
         <script type="text/javascript">
             function viewChampions(that){
                 $(that).parent().siblings('#championsContainer').css("display", "block").animate({
@@ -17,23 +25,31 @@ and open the template in the editor.
                                                                         opacity: 1
                                                                       }, 3000 );
             }
+            //function viewDetailedPage(){
+            //   window.location.href = 'detailed.php'; 
+            //}
         </script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <style>
             h1, h2{
                 margin-bottom: 0;
                 display: inline-block;
             }
-            #championsContainer{
+            #container{
                 width: 75%;
                 margin-left: 12.5%;
+            }
+            #championsContainer{
+                width: 100%;
                 display: none;
                 opacity: 0;
                 margin-top: -1000px;
-                z-index: -1;
+                z-index: -5;
             }
             #statsContainer{
-                width: 50%;
-                margin-left: 35%;
+                width: 75%;
+                margin-left: 32.5%;
             }
             #team100{
                 margin-left: 10%;
@@ -83,9 +99,60 @@ and open the template in the editor.
             .victory{
                 color: green;
             }
+            #detailsButtons{
+                width: 50%;
+                margin-left: 25%;
+            }
+            #detailsButtons button{
+                width: 50%;
+                float: left;
+            }
         </style>
     </head>
     <body>
+        <header id="branding" >
+            <div class="social-profiles clearfix">
+                                                  <ul>
+                                          </ul>
+                                          </div><!-- .social-profiles --><div class="hgroup-wrap">
+            <div class="container clearfix">
+              <section id="site-logo" class="clearfix">
+                      <h1 id="site-title"> <a href="http://www.lolhistoryapp.com/" title="lolhistory app" rel="home">
+                  lolhistory app        </a> </h1>
+                       <h2 id="site-description">
+                  league of legends summoner lookup app              </h2>
+                    </section>
+              <!-- #site-logo -->
+              <button class="menu-toggle">Responsive Menu</button>
+              <section class="hgroup-right">
+                <nav id="access" class="clearfix"><ul class="nav-menu"><li id="menu-item-55" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-5 current_page_item menu-item-55"><a href="http://www.lolhistoryapp.com/">Home</a></li>
+          <li id="menu-item-82" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-82"><a href="http://www.lolhistoryapp.com/ios-patch-notes/">iOS Patch Notes</a></li>
+          <li id="menu-item-58" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-58"><a href="http://www.lolhistoryapp.com/android-patch-notes/">Android Patch Notes</a></li>
+          <li id="menu-item-157" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-157"><a href="http://www.lolhistoryapp.com/twitter-feed/">Twitter Feed</a></li>
+          <li id="menu-item-118" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-118"><a href="http://www.lolhistoryapp.com/affiliates/">Affiliates</a></li>
+          <li id="menu-item-189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-189"><a href="http://www.lolhistoryapp.com/media-kit/">Media kit</a></li>
+          <li id="menu-item-56" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-56"><a href="http://www.lolhistoryapp.com/contact/">Contact</a></li>
+          </ul></nav><!-- #access -->      <div class="search-toggle"></div>
+                <!-- .search-toggle -->
+                <div id="search-box" class="hide">
+
+          <form action="http://www.lolhistoryapp.com/" method="get" class="searchform clearfix">
+            <label class="assistive-text">
+              Search  </label>
+            <input type="search" placeholder="Search" class="s field" name="s">
+            <input type="submit" value="Search" class="search-submit">
+          </form>
+          <!-- .search-form -->
+                  <span class="arrow"></span> </div>
+                <!-- #search-box --> 
+              </section>
+              <!-- .hgroup-right --> 
+            </div>
+            <!-- .container --> 
+          </div>
+          <!-- .hgroup-wrap -->
+
+          </header>
         <?php
             error_reporting(E_ERROR | E_WARNING | E_PARSE);
             if(isset($_POST['summoner'])){
@@ -239,7 +306,7 @@ and open the template in the editor.
                             if(!array_key_exists('championsKilled', $stats)) { $stats['championsKilled'] = 0; }
                             if(!array_key_exists('numDeaths', $stats)) { $stats['numDeaths'] = 0; }
                             $kda = "<h2>" . $stats['championsKilled'] . " / " . $stats['numDeaths'] . " / " . $stats['assists'] . "</h2>";
-                            echo "<div id='container'>
+                            echo "<div id='container' class='jumbotron'>
                                 <hr width='50%'>
                                 <div id='statsContainer'>
                                     <div id='champimage'><img  style='border-radius: 60px; -webkit-border-radius: 60px; -moz-border-radius: 60px;' src='images/".str_replace(" ", "", str_replace("'", "", $champion[$match['championId']]['name']))."Square.png' /></div>
@@ -250,7 +317,7 @@ and open the template in the editor.
                                             echo "<div id='champIntro' class='defeat'><h1>".$champion[$match['championId']]['name']. "</h1>&nbsp;&nbsp;" . $kda . "</div>";  
                                         }
                                   echo "<div id='ip'><img width='14px' src='images/IP.png' /> ".$match['ipEarned']."</div>
-                                        <div id='timeDateType'>".date("M, d-Y H:i", $match['createDate']/1000)." | ".str_replace("_", " ", $match['subType'])."</div>
+                                        <div id='timeDateType'>".date('i', $matchdetails['matchDuration'])."m, ".date("M, d-Y H:i", $match['createDate']/1000)." | ".str_replace("_", " ", $match['subType'])."</div>
                                         <div style='clear: both;'></div>
                                     </div>
                                     <div id='champOthers'>
@@ -268,7 +335,6 @@ and open the template in the editor.
                                             <img src='images/".str_replace(" ", "", $summonerSpells[$match['spell2']]['name'])."_sp.png' />
                                         </div>
                                     </div>
-                                    <button id='readMore' onclick='viewChampions(this)'>Read more!</button>
                                 </div>
                             ";
                             $MVP = "";
@@ -388,6 +454,19 @@ and open the template in the editor.
                                             echo "<br />Most gold:" . array_shift($MostGold);
                                         }
                             echo "</div>
+                                  </div>
+                                  <br /><br />
+                                  <div id='detailsButtons'>
+                                  <form action='detailed.php' method='post'>
+                                  <button type='button' id='readMore' class='btn btn-default' onclick='viewChampions(this)'>Read more</button>
+                                  <button type='submit' id='extraDetails' class='btn btn-default'>Detailed page</button>
+                                  <input type='hidden' name='server' value='".$_POST['server']."' />
+                                  <input type='hidden' name='gameId' value='".$match['gameId']."' />
+                                  <input type='hidden' name='championId' value='".$match['championId']."' />
+                                  <input type='hidden' name='ipEarned' value='".$match['ipEarned']."' />
+                                  </form>
+                                  </div>
+                                  <div style='clear: both;'></div>
                                   </div>
                                   </div>";
                             echo "<br /><br />";
