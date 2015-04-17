@@ -82,6 +82,8 @@
                         $("body").find("#container:first").fadeIn();
                         $("body").find(".prev").removeClass('prev');
                     }
+                    var value = document.getElementById('summonerId').value;
+                    document.getElementById('summonerId').value = value+1;
                 });
                 //if($("body").find("#container:visible").length > 1){
                 //    $("body").find("#container:visible:first").css("display", "none");
@@ -96,7 +98,13 @@
                         $("body").find("#container:hidden:last").fadeIn();
                         $("body").find(".prev").removeClass('prev');
                     }
+                    var value = document.getElementById('summonerId').value;
+                    document.getElementById('summonerId').value = value-1;
                 });
+            }
+            
+            function eventAnimation(){
+                $("#eventAnimation").submit();
             }
         </script>
     </head>
@@ -145,13 +153,19 @@
 
           </header>
     <div id='pagerContainer'> 
-        <form action="" method="post">
+        <form action="eventAnimation.php" id="eventAnimation" method="post">
             <ul class="pager">
                 <li class="previous"><a href="#" onclick="javascript: Previous();">Previous Player</a></li>
                 <li class="team100"><a href="#" onclick="javascript: Team100();">Blue Team</a></li>
+                <li class="eventAnimation"><a href="#" onclick="javascript: eventAnimation();">Event Overview</a></li>
                 <li class="team200"><a href="#" onclick="javascript: Team200();">Purple Team</a></li>
                 <li class="next"><a href="#" onclick="javascript: Next();">Next Player</a></li>
             </ul>
+            <input type='hidden' name='server' value='<?php echo $_POST['server'] ?>' />
+            <input type='hidden' name='gameId' value='<?php echo $_POST['gameId'] ?>' />
+            <input type='hidden' name='championId' value='<?php echo $_POST['championId'] ?>' />
+            <input type='hidden' name='ipEarned' value='<?php echo $_POST['ipEarned'] ?>' />
+            <input type='hidden' id='summonerId' name='summonerId' value='' />
         </form>
     </div>
 <?php
@@ -301,10 +315,11 @@
         $kda[$eachParticipant['participantId']] = "<h2>" . $stats['kills'] . " / " . $stats['deaths'] . " / " . $stats['assists'] . "</h2>";
         if($eachParticipant['participantId'] == $_POST['summonerId']){
             echo "  <div id='container'>";
+            $DISPLAYEDID = $eachParticipant['participantId'];
         } else {
             echo "  <div id='container'style='display: none;'>";
         }
-        echo "<div id='endStatus' class='jumbotron'>";
+        echo "<div style='opacity: 0;' id='ID'>".$eachParticipant['participantId']."</div><div id='endStatus' class='jumbotron'>";
         if($eachParticipant['participantId'] < 6){
             $pTeam = '100';
             if($team[0]['winner'] == 1){
@@ -375,6 +390,13 @@
                     </div>
                 </div>
             ";
+    }
+    if(isset($DISPLAYEDID)){
+        echo "
+                    <script>
+                        $('#summonerId').val(".$DISPLAYEDID.");
+                    </script>
+             ";
     }
     ?>
     <form id="nextForm">

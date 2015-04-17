@@ -9,7 +9,8 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-        <title></title>        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+        <title></title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <link rel='stylesheet' id='cntctfrm_form_style-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/contact-form-plugin/css/form_style.css?ver=4.1.1' type='text/css' media='all' />
         <link rel='stylesheet' id='db_twitter_feed-default-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/devbuddy-twitter-feed/assets/feed.css?ver=2.2' type='text/css' media='all' />
@@ -20,49 +21,56 @@ and open the template in the editor.
         <link rel='stylesheet' id='wptt_front-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/wp-twitter-feeds/css/admin_style.min.css?ver=4.1.1' type='text/css' media='all' />
         <link rel='stylesheet' id='jetpack_css-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/jetpack/css/jetpack.css?ver=3.4.1' type='text/css' media='all' />
         <style>
+            body{
+                background-color: white;
+            }
+            .jumbotron{
+                padding: 5px !important;
+            }
             @media all and (min-width: 1000px) { 
                 #events{
                     width: 65%;
                     margin-left: 17.5%;
-                    border-top: 2px solid #000;
-                    border-right: 2px solid #000;
-                    border-left: 2px solid #000;
+                    //border-top: 2px solid #000;
+                    //border-right: 2px solid #000;
+                    //border-left: 2px solid #000;
                 }
             }
             @media all and (min-width: 1400px) { 
                 #events{
                     width: 50%;
                     margin-left: 25%;
-                    border-top: 2px solid #000;
-                    border-right: 2px solid #000;
-                    border-left: 2px solid #000;
+                    //border-top: 2px solid #000;
+                    //border-right: 2px solid #000;
+                    //border-left: 2px solid #000;
                 }
             }
             @media all and (min-width: 800px) { 
                 #events{
                     width: 75%;
                     margin-left: 12.5%;
-                    border-top: 2px solid #000;
-                    border-right: 2px solid #000;
-                    border-left: 2px solid #000;
+                    //border-top: 2px solid #000;
+                    //border-right: 2px solid #000;
+                    //border-left: 2px solid #000;
                 }
             }
             @media all and (max-width: 799px) { 
                 #events{
                     width: 95%;
                     margin-left: 2.5%;
-                    border-top: 2px solid #000;
-                    border-right: 2px solid #000;
-                    border-left: 2px solid #000;
+                    //border-top: 2px solid #000;
+                    //border-right: 2px solid #000;
+                    //border-left: 2px solid #000;
                 }
             }
             #time{
-                border-bottom: 2px solid #000;
+                font-size: 18px;
+                //border-bottom: 2px solid #000;
                 width: auto;
             }
             .event{
                 width: 100%;
-                border-bottom: 2px solid #000;
+                //border-bottom: 2px solid #000;
             }
             #item{
                 padding: 5px;
@@ -71,8 +79,8 @@ and open the template in the editor.
                 vertical-align: middle;
             }
             .endscreen{
-                width: 75% !important;
-                margin-left: 12.5% !important;
+                width: 50% !important;
+                margin-left: 25% !important;
             }
             .event > img:not(.endscreen){
                float: right;
@@ -80,6 +88,26 @@ and open the template in the editor.
             }
             .clear { clear: both; }
         </style>
+        <script>
+            function Next(){
+                var value = <?php echo $_POST['summonerId']; ?>+1;
+                if(value == 11){
+                    value = 1;
+                }
+                document.getElementById('nextSummoner').value = value;
+                $("#prevSummoner").removeProp("name");
+                $("#summonerForm").submit();
+            } 
+            function Prev(){
+                var value = <?php echo $_POST['summonerId']; ?>-1;
+                if(value == 0){
+                    value = 10;
+                }
+                document.getElementById('prevSummoner').value = value;
+                $("#nextSummoner").removeProp("name");
+                $("#summonerForm").submit();
+            } 
+        </script>
     </head>
     <body>
         <header id="branding" >
@@ -139,6 +167,9 @@ and open the template in the editor.
                 }
                 print_r($matches . "<br />");
             }*/
+        
+            $participant = $_POST['summonerId'];
+            $participant = intval($participant);
             /***
              * 
              * GET CHAMPION ID, NAME, SPELLS 
@@ -188,7 +219,7 @@ and open the template in the editor.
              * MATCH DATA WITH THE SELECTED MATCHID IN MATCH HISTORY OVERVIEW
              * 
              */
-            $thismatch = get_object_vars(json_decode(file_get_contents("https://na.api.pvp.net/api/lol/na/v2.2/match/1774522443?includeTimeline=true&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+            $thismatch = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$_POST['gameId']."?includeTimeline=true&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
             //TIME LINE
             $match_timeline = get_object_vars($thismatch['timeline']);
             /***
@@ -219,28 +250,41 @@ and open the template in the editor.
                     $summoners[$ParticipantId]['summonerName'] = $summonerInfo['summonerName'];
                 }
             }
+            //var_dump($summoners);
             foreach($thismatch['teams'] as $team){
                 $team = get_object_vars($team);
                 //var_dump($participantIdentity);
                 $teamid = $team['teamId'];
-                if ($summoners[9]['teamId'] === $teamid){
+                if ($summoners[$participant]['teamId'] === $teamid){
                     if($team['winner'] === true){
-                        $summoners[9]['win'] = "<img class=\'endscreen\' src=\'images/Victory.png\' />";
+                        $summoners[$participant]['win'] = "<img class=\'endscreen\' src=\'images/Victory.png\' />";
                     } elseif($team['winner'] === false){
-                        $summoners[9]['win'] = "<img class=\'endscreen\' src=\'images/Defeat.png\' />";
+                        $summoners[$participant]['win'] = "<img class=\'endscreen\' src=\'images/Defeat.png\' />";
                     }
                 }
             }
             ?>
-        <div style="width: 50%; margin-left: 25%; text-align: center;">
-            <h2>Events of <?php echo $summoners[9]['summonerName'] . " as " . $champion[$summoners[9]['championId']]['name'] . " <img src='images/".str_replace(" ", "", $champion[$summoners[9]['championId']]['name'])."Square.png'" ?></h2>
-        </div><br />
-        <div style="width: 50%; margin-left: 25%; text-align: center;">
-            <button>Back to the beginning</button>
-            <button id="Pause" style="display:none;">Pause</button>
-            <button id="Play" onclick="javascript: listTicker({list: eventList ,startIndex:0,trickerPanel: $('#events'),interval: 3 * 500,});">Play</button>
-            <button id="Play2" style="display:none;">Play</button>
-            <button>Next Player</button>
+        <div class='jumbotron'>
+            <div style="width: 50%; margin-left: 25%; text-align: center;">
+                <h2>Events of <?php echo $summoners[$participant]['summonerName'] . " as " . $champion[$summoners[$participant]['championId']]['name'] . " <img src='images/".str_replace(" ", "", str_replace("'", "", $champion[$summoners[$participant]['championId']]['name']))."Square.png'"; ?></h2>
+            </div><br />
+            <div style="width: 50%; margin-left: 25%; text-align: center;">
+                <form id="summonerForm" action="" method="post">
+                    <ul class="pager">
+                        <li onclick="Prev()"><a>Previous Player</a></li>
+                        <li id="Pause" style="display:none;"><a>Pause</a></li>
+                        <li id="Play"><a onclick="javascript: listTicker({list: eventList ,startIndex:0,trickerPanel: $('#events'),interval: 3 * 500,});">Play</a></li>
+                        <li id="Play2" style="display:none;"><a>Play</a></li>
+                        <li onclick="Next()"><a>Next Player</a></li>
+                    </ul>
+                    <input type="hidden" name="summonerId" id="nextSummoner" />
+                    <input type="hidden" name="summonerId" id="prevSummoner" />
+                    <input type="hidden" name="server" value="<?php echo $_POST['server']; ?>"/>
+                    <input type="hidden" name="gameId" value="<?php echo $_POST['gameId']; ?>" />
+                    <input type="hidden" name="championId" value="<?php echo $_POST['championId']; ?>" />
+                    <input type="hidden" name="ipEarned" value="<?php echo $_POST['ipEarned']; ?>" />
+                </form>
+            </div>
         </div>
 
         <div id="events"></div>
@@ -262,12 +306,16 @@ and open the template in the editor.
                             //EACH TIMESTAMP
                             $timestamp = get_object_vars($timestamp);
                             if(isset($timestamp['participantId'])){
-                                if($timestamp['participantId'] === 9){
+                                if($timestamp['participantId'] === $participant){
                                 $events[$timestamp['participantId']][] = $timestamp;
                                 }
                             } elseif(isset($timestamp['killerId'])){
-                                if($timestamp['killerId'] === 9){
+                                if($timestamp['killerId'] === $participant){
                                 $events[$timestamp['killerId']][] = $timestamp;
+                                }
+                            } elseif(isset($timestamp['creatorId'])){
+                                if($timestamp['creatorId'] === $participant){
+                                $events[$timestamp['creatorId']][] = $timestamp;
                                 }
                             } 
                         }
@@ -275,7 +323,7 @@ and open the template in the editor.
                 }
             }
             $endgametime = gmdate('i:s',$thismatch['matchDuration']);
-            $win = $summoners[9]['win'];
+            $win = $summoners[$participant]['win'];
             //print_r($championsSpells);
             //echo "<br /><br />";
             //print_r($summoners);
@@ -301,6 +349,8 @@ and open the template in the editor.
                  * AGAIN FROM OBJECT TO ARRAY
                  * 
                  */
+                $LastBootsBought = "";
+                $LastJungleItemBought = "";
                 foreach($userEvents as $userEvent){
                     
                     /***
@@ -312,13 +362,25 @@ and open the template in the editor.
                     //echo "Time ingame: " . $time . "<br />";
                     //echo $userEvent['eventType'];
                     if($userEvent['eventType'] === "ITEM_PURCHASED"){
+                        if($items[$userEvent['itemId']]['name'] == "Boots of Swiftness" || $items[$userEvent['itemId']]['name'] == "Boots of Mobility" || $items[$userEvent['itemId']]['name'] == "Berserker's Greaves" || $items[$userEvent['itemId']]['name'] == "Ionian Boots of Lucidity" || $items[$userEvent['itemId']]['name'] == "Mercury's Treads" || $items[$userEvent['itemId']]['name'] == "Ninja Tabi" || $items[$userEvent['itemId']]['name'] == "Sorcerer's Shoes"){
+                            $LastBootsBought = $items[$userEvent['itemId']]['name'];
+                        }
+                        if($items[$userEvent['itemId']]['name'] == "Poacher's Knife" || $items[$userEvent['itemId']]['name'] == "Skirmisher's Sabre" || $items[$userEvent['itemId']]['name'] == "Stalker's Blade" || $items[$userEvent['itemId']]['name'] == "Ranger's Trailblazer"){
+                            $LastJungleItemBought = $items[$userEvent['itemId']]['name'];
+                        }
                         $itemimagename = str_replace("'", "", $items[$userEvent['itemId']]['name']);
                         if(strpos($itemimagename, " (Trinket)") !== false){
                             $itemimagename = str_replace(" (Trinket)", "", $itemimagename);
                             $itemimage = str_replace(" ", "_", $itemimagename).".jpg";
                         } elseif(strpos($itemimagename, "Enchantment: ") !== false){
-                            $itemimagename = str_replace("Enchantment: ", "", $itemimagename);
-                            $itemimage = str_replace(" ", "_", $itemimagename).".png";
+                            $itemimagename = str_replace(")", "", str_replace("(", "", str_replace("Enchantment: ", "", $itemimagename)));
+                            if($LastBootsBought == "Boots of Swiftness" || $LastBootsBought == "Boots of Mobility" || $LastBootsBought == "Berserker's Greaves" || $LastBootsBought == "Ionian Boots of Lucidity" || $LastBootsBought == "Mercury's Treads" || $LastBootsBought == "Ninja Tabi" || $LastBootsBought == "Sorcerer's Shoes"){
+                                $itemimage = str_replace(" ", "_", str_replace("'", "", $LastBootsBought)).'_'.str_replace(" ", "_", $itemimagename).".png";
+                            } elseif($LastJungleItemBought == "Poacher's Knife" || $LastJungleItemBought == "Skirmisher's Sabre" || $LastJungleItemBought == "Stalker's Blade" || $LastJungleItemBought == "Ranger's Trailblazer"){
+                                $itemimage = str_replace(" ", "_", str_replace("'", "", $LastJungleItemBought)).'_'.str_replace(" ", "_", $itemimagename).".png";
+                            } else {
+                                $itemimage = str_replace(" ", "_", $itemimagename).".png";
+                            }
                         } elseif ($itemimagename === "Targons Brace" || $itemimagename === "Frostfang"){
                             $itemimage = str_replace(" ", "_", $itemimagename).".jpg";
                         } else {
@@ -327,21 +389,88 @@ and open the template in the editor.
                         $e =  "Purchased " . $items[$userEvent['itemId']]['name'] . " | <img src='images/".$itemimage."' />";
                         $lastitem[$userEvent['timestamp']] = $items[$userEvent['itemId']]['name'] . " | <img src='images/".$itemimage."' />";
                     }
+                    if($userEvent['eventType'] === "ITEM_UNDO"){
+                        $itemimagename = str_replace("'", "", $items[$userEvent['itemBefore']]['name']);
+                        if(strpos($itemimagename, " (Trinket)") !== false){
+                            $itemimagename = str_replace(" (Trinket)", "", $itemimagename);
+                            $itemimage = str_replace(" ", "_", $itemimagename).".jpg";
+                        } elseif(strpos($itemimagename, "Enchantment: ") !== false){
+                            $itemimagename = str_replace(")", "", str_replace("(", "", str_replace("Enchantment: ", "", $itemimagename)));
+                            if($items[$userEvent['itemBefore']]['name'] == "Boots of Swiftness" || $items[$userEvent['itemBefore']]['name'] == "Boots of Mobility" || $items[$userEvent['itemBefore']]['name'] == "Berserker's Greaves" || $items[$userEvent['itemBefore']]['name'] == "Ionian Boots of Lucidity" || $items[$userEvent['itemBefore']]['name'] == "Mercury's Treads" || $items[$userEvent['itemBefore']]['name'] == "Ninja Tabi" || $items[$userEvent['itemBefore']]['name'] == "Sorcerer's Shoes"){
+                                $itemimage = str_replace(" ", "_", str_replace("'", "", $LastBootsBought)).'_'.str_replace(" ", "_", $itemimagename).".png";
+                            } elseif($items[$userEvent['itemBefore']]['name'] == "Poacher's Knife" || $items[$userEvent['itemBefore']]['name'] == "Skirmisher's Sabre" || $items[$userEvent['itemBefore']]['name'] == "Stalker's Blade" || $items[$userEvent['itemBefore']]['name'] == "Ranger's Trailblazer"){
+                                $itemimage = str_replace(" ", "_", str_replace("'", "", $LastJungleItemBought)).'_'.str_replace(" ", "_", $itemimagename).".png";
+                            } else {
+                                $itemimage = str_replace(" ", "_", $itemimagename).".png";
+                            }
+                        } elseif ($itemimagename === "Targons Brace" || $itemimagename === "Frostfang"){
+                            $itemimage = str_replace(" ", "_", $itemimagename).".jpg";
+                        } else {
+                            $itemimage = str_replace(" ", "_", $itemimagename).".png";
+                        }
+                        $e =  "Undid buying " . $items[$userEvent['itemBefore']]['name'] . " | <img src='images/".$itemimage."' />";
+                    }
+                    
+                    if($userEvent['eventType'] === "ITEM_SOLD"){
+                        $itemimagename = str_replace("'", "", $items[$userEvent['itemId']]['name']);
+                        if(strpos($itemimagename, " (Trinket)") !== false){
+                            $itemimagename = str_replace(" (Trinket)", "", $itemimagename);
+                            $itemimage = str_replace(" ", "_", $itemimagename).".jpg";
+                        } elseif(strpos($itemimagename, "Enchantment: ") !== false){
+                            $itemimagename = str_replace(")", "", str_replace("(", "", str_replace("Enchantment: ", "", $itemimagename)));
+                            if($items[$userEvent['itemId']]['name'] == "Boots of Swiftness" || $items[$userEvent['itemId']]['name'] == "Boots of Mobility" || $items[$userEvent['itemId']]['name'] == "Berserker's Greaves" || $items[$userEvent['itemId']]['name'] == "Ionian Boots of Lucidity" || $items[$userEvent['itemId']]['name'] == "Mercury's Treads" || $items[$userEvent['itemId']]['name'] == "Ninja Tabi" || $items[$userEvent['itemId']]['name'] == "Sorcerer's Shoes"){
+                                $itemimage = str_replace(" ", "_", str_replace("'", "", $LastBootsBought)).'_'.str_replace(" ", "_", $itemimagename).".png";
+                            } elseif($items[$userEvent['itemId']]['name'] == "Poacher's Knife" || $items[$userEvent['itemId']]['name'] == "Skirmisher's Sabre" || $items[$userEvent['itemId']]['name'] == "Stalker's Blade" || $items[$userEvent['itemId']]['name'] == "Ranger's Trailblazer"){
+                                $itemimage = str_replace(" ", "_", str_replace("'", "", $LastJungleItemBought)).'_'.str_replace(" ", "_", $itemimagename).".png";
+                            } else {
+                                $itemimage = str_replace(" ", "_", $itemimagename).".png";
+                            }
+                        } elseif ($itemimagename === "Targons Brace" || $itemimagename === "Frostfang"){
+                            $itemimage = str_replace(" ", "_", $itemimagename).".jpg";
+                        } else {
+                            $itemimage = str_replace(" ", "_", $itemimagename).".png";
+                        }
+                        $e =  "Sold " . $items[$userEvent['itemId']]['name'] . " | <img src='images/".$itemimage."' />";
+                    }/*
+                    if($userEvent['eventType'] === "WARD_PLACED"){
+                        if($userEvent['wardType'] == "SIGHT_WARD"){
+                            $ward = "Sight_Ward";
+                        }
+                        if($userEvent['wardType'] == "VISION_WARD"){
+                            $ward = "Vision_Ward";
+                        }
+                        if($userEvent['wardType'] == "TEEMO_MUSHROOM"){
+                            $ward = "Noxious_Trap";
+                        }
+                        if($userEvent['wardType'] == "YELLOW_TRINKET"){
+                            $ward = "Warding_Totem";
+                        }
+                        if($userEvent['wardType'] == "YELLOW_TRINKET_UPGRADE"){
+                            $ward = "Greater_Totem";
+                        }
+                        $ditemimagename = str_replace(" (Trinket)", "", $ditemimagename);
+                        $ditemimage = $ward.".jpg";
+                        $e = "Placed ".str_replace("_", " ", $ward);
+                    }*/
                     if($userEvent['eventType'] === "ITEM_DESTROYED"){
                         $ditemimagename = str_replace("'", "", $items[$userEvent['itemId']]['name']);
                         if(strpos($ditemimagename, " (Trinket)") !== false){
                             $ditemimagename = str_replace(" (Trinket)", "", $ditemimagename);
                             $ditemimage = str_replace(" ", "_", $ditemimagename).".jpg";
                         } elseif(strpos($ditemimagename, "Enchantment: ") !== false){
-                            $ditemimagename = str_replace("Enchantment: ", "", $ditemimagename);
-                            $ditemimage = str_replace(" ", "_", $ditemimagename).".png";
+                            $itemimagename = str_replace(")", "", str_replace("(", "", str_replace("Enchantment: ", "", $itemimagename)));
+                            if($itemimagename == "Devourer" || $itemimagename == "Warrior" || $itemimagename == "Cinderhulk" || $itemimagename == "Magus"){
+                                $ditemimage = str_replace(" ", "_", str_replace("'", "", $LastJungleItemBought)).'_'.str_replace(" ", "_", $itemimagename).".png";
+                            } elseif($itemimagename == "Alacrity" || $itemimagename == "Homeguard" || $itemimagename == "Furor" || $itemimagename == "Captain" || $itemimagename == "Distortion"){
+                                $ditemimage = str_replace(" ", "_", str_replace("'", "", $LastBootsBought)).'_'.str_replace(" ", "_", $itemimagename).".png";
+                            } else {
+                                $ditemimage = str_replace(" ", "_", $itemimagename).".png";
+                            }
                         } else {
                             $ditemimage = str_replace(" ", "_", $ditemimagename).".png";
                         }
                         if(strpos($items[$userEvent['itemId']]['name'], "Potion") !== false || strpos($items[$userEvent['itemId']]['name'], "Biscuit of Rejuvenation") !== false){
                             $e =  "Used " . $items[$userEvent['itemId']]['name'] . " | <img src='images/".$ditemimage."' />";
-                        } elseif(strpos($items[$userEvent['itemId']]['name'], "Ward") !== false){
-                            $e =  "Placed " . $items[$userEvent['itemId']]['name'] . " | <img src='images/".$ditemimage."' />";
                         } else {
                             if(!isset($lastitem[$userEvent['timestamp']])){
                                 $e =  "Destroyed " . $items[$userEvent['itemId']]['name'] . " | <img src='images/".$ditemimage."' />";
@@ -382,7 +511,7 @@ and open the template in the editor.
                         $e = "Destroyed an enemy " . $wardkilled . " | <img src='images/".$wardkillimage."'/>";
                     }
                     if($userEvent['eventType'] === "SKILL_LEVEL_UP"){
-                        $skillname = $championsSpells[$summoners[9]['championId']][$userEvent['skillSlot']]['name'];
+                        $skillname = $championsSpells[$summoners[$participant]['championId']][$userEvent['skillSlot']]['name'];
                         $skillimage = str_replace(" ", "_", $skillname).".png";
                         if($skillname === "Zephyr" || $skillname === "Distortion"){
                             $skillimage = str_replace(" ", "_", $skillname)."_skill.png";
@@ -405,25 +534,48 @@ and open the template in the editor.
                         $e =  "Placed " . $wardplaced . " | <img src='images/".$wardplacedimage."' />";
                     }
                     if($userEvent['eventType'] === "BUILDING_KILL"){
-                        $e = "Destroyed the " . $userEvent['towerType'] . " | <img src='images/Turret.png' />";
+                        if($userEvent['towerType'] == "OUTER_TURRET"){
+                            $building = "Outer Turret";
+                        }
+                        if($userEvent['towerType'] == "INNER_TURRET"){
+                            $building = "Inner Turret";
+                        }
+                        if($userEvent['towerType'] == "BASE_TURRET"){
+                            $building = "Base Turret";
+                        }
+                        if($userEvent['towerType'] == "NEXUS_TURRET"){
+                            $building = "Nexus Turret";
+                        }
+                        if($userEvent['towerType'] == "UNDEFINED_TURRET"){
+                            $building = "Undefined Turret";
+                        }
+                        if($userEvent['towerType'] == "INHIBITOR"){
+                            $building = "Inhibitor";
+                        }
+                        $e = "Destroyed the " . $building . " | <img src='images/Turret.png' />";
                     }
                     if($userEvent['eventType'] === "ELITE_MONSTER_KILL"){
                         if($userEvent['monsterType'] === "BARON_NASHOR"){
                             $monsterimage = "baron.png";
+                            $monster = 'Baron Nashor';
                         }
                         if($userEvent['monsterType'] === "DRAGON"){
                             $monsterimage = "dragon.png";
+                            $monster = 'Dragon';
                         }
                         if($userEvent['monsterType'] === "BLUE_GOLEM"){
                             $monsterimage = "blue.png";
+                            $monster = 'Blue Golem';
                         }
                         if($userEvent['monsterType'] === "RED_LIZARD"){
                             $monsterimage = "red.png";
+                            $monster = 'Red Lizard';
                         }
                         if($userEvent['monsterType'] === "VILEMAW"){
                             $monsterimage = "vilemaw.png";
+                            $monster = 'Vilemaw';
                         }
-                        $e = "Killed " . $userEvent['monsterType'] . " | <img src='images/".$monsterimage."' />";
+                        $e = "Killed " . $monster . " | <img src='images/".$monsterimage."' />";
                     }
                     if($removeLast === true){
                         echo 'eventList.pop();';
@@ -462,7 +614,7 @@ and open the template in the editor.
                             value = value.replace('{\"', '');
                             value = value.replace('\"}', '');
                             parts = value.split('\":\"');
-                            value = '<div id=\"event'+index+'\" class=\"event\" style=\"display: none;\"><div id=\"time\">'+parts[0]+'</div>';
+                            value = '<div id=\"event'+index+'\" class=\"event jumbotron\" style=\"display: none;\"><div id=\"time\">'+parts[0]+'</div>';
                             parts[1] = parts[1].split('|');
                             var number = parts[1].length;
                             if(number == 1){
