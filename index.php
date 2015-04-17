@@ -32,9 +32,12 @@ and open the template in the editor.
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <style>
-            h1, h2{
+            #kda > h1, #kda > h2{
                 margin-bottom: 0;
                 display: inline-block;
+            }
+            #site-description{
+                margin-top: -12px;
             }
             #container{
                 width: 75%;
@@ -107,6 +110,23 @@ and open the template in the editor.
                 width: 50%;
                 float: left;
             }
+            #formSearch{
+                width: 50%;
+                margin-left: 25%;
+                margin-top: 100px;
+                text-align: center;
+            }
+            #submitBtn{
+                width: 25%;
+                margin-left: 37.5%;
+            }
+            #searchInput{
+                width: 50%;
+                margin-left: 0px;
+            }
+            input{
+                text-align: center;
+            }
         </style>
     </head>
     <body>
@@ -153,6 +173,17 @@ and open the template in the editor.
           <!-- .hgroup-wrap -->
 
           </header>
+        <div id="formSearch" class="jumbotron">
+            <form action=" " method="post">
+                <input type="text" name="summoner" id="searchInput" placeholder="Summoner Name" />
+                <br /><select name="server">
+                    <option value="na">North America</option>
+                    <option value="euw">Europa West</option>
+                    <option value="eune">Europa North-Eastern</option>
+                </select>
+                <input id="submitBtn" type="submit" value="Submit" />
+            </form>
+        </div>
         <?php
             error_reporting(E_ERROR | E_WARNING | E_PARSE);
             if(isset($_POST['summoner'])){
@@ -521,18 +552,8 @@ and open the template in the editor.
                     }
                     }
                 }
-            } else {
+            }
          ?>
-        <form action=" " method="post">
-            <input type="text" name="summoner" placeholder="Summoner Name" />
-            <select name="server">
-                <option value="na">North America</option>
-                <option value="euw">Europa West</option>
-                <option value="eune">Europa North-Eastern</option>
-            </select>
-            <input type="submit" value="Submit" />
-        </form>
-        <?php } ?>
     </body>
 </html>
 <?php session_destroy(); ?>
