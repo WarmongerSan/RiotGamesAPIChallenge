@@ -497,7 +497,7 @@ and open the template in the editor.
                             }
                             echo "<div id='mvp'>
                                         <h1>MVP of the match</h1><br />
-                                        <img src='images/".$champion[str_replace("'", "", str_replace("200-", "", str_replace("100-", "", $championMVP)))]['name']."Square.png' />";
+                                        <img src='images/".str_replace("%20", "", str_replace(" ", "", $champion[str_replace("'", "", str_replace("200-", "", str_replace("100-", "", $championMVP)))]['name']))."Square.png' />";
                                         if(array_shift(array_keys($MostKills)) == $championMVP){
                                             echo "<br />Most kills:" . array_shift($MostKills);
                                         }
