@@ -217,7 +217,7 @@ and open the template in the editor.
             error_reporting(E_ERROR | E_WARNING | E_PARSE);
             if(isset($_POST['summoner'])){
                 
-                $staticchampdata = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=spells&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                $staticchampdata = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=spells&api_key=insert_api_key_here")));
                 foreach($staticchampdata as $champdata){
                     if(is_object($champdata)){
                         $champdata = get_object_vars($champdata);
@@ -239,7 +239,7 @@ and open the template in the editor.
                     }
                 }
                 
-                $allitems = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/item?itemListData=image&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                $allitems = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/item?itemListData=image&api_key=insert_api_key_here")));
                 foreach($allitems as $itemdata){
                     //var_dump($itemdata);
                     if(is_object($itemdata)){
@@ -256,7 +256,7 @@ and open the template in the editor.
             //var_dump($items);
             //echo "<br /><br />";
                 
-                $summonerspells = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/euw/v1.2/summoner-spell?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                $summonerspells = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/euw/v1.2/summoner-spell?api_key=insert_api_key_here")));
                 foreach($summonerspells['data'] as $s_spells){
                     if(is_object($s_spells)){
                         $s_spells = get_object_vars($s_spells);
@@ -264,19 +264,19 @@ and open the template in the editor.
                     $summonerSpells[$s_spells['id']]['name'] = $s_spells['name'];
                 }
                 //$_POST['summoner'] = str_replace(" ", "", $_POST['summoner']);
-                $summoner = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v1.4/summoner/by-name/".$_POST['summoner']."?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                $summoner = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v1.4/summoner/by-name/".$_POST['summoner']."?api_key=insert_api_key_here")));
                 foreach($summoner as $user){
                     $user = get_object_vars($user);
                     $_SESSION['userid'] = $user['id'];
                 }
-                $allmatches = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v1.3/game/by-summoner/".$_SESSION['userid']."/recent?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                $allmatches = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v1.3/game/by-summoner/".$_SESSION['userid']."/recent?api_key=insert_api_key_here")));
                 //print_r($allmatches);
                 foreach($allmatches as $matches){
                     if(is_array($matches)){
                         foreach($matches as $match){
                             $match = get_object_vars($match);
                             $stats = get_object_vars($match['stats']);
-                            $matchdetails = get_object_vars(json_decode(file_get_contents(urldecode("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$match['gameId']."?includeTimeline=true&api_key=79de72ae-b73d-4f43-ad31-4267915265ea"))));
+                            $matchdetails = get_object_vars(json_decode(file_get_contents(urldecode("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$match['gameId']."?includeTimeline=true&api_key=insert_api_key_here"))));
                             //var_dump($matchdetails);
                             foreach($matchdetails['participants'] AS $eachParticipant){
                                 if(get_object_vars($eachParticipant)['championId'] == $match['championId']){
@@ -543,7 +543,7 @@ and open the template in the editor.
                  * GET CHAMPION ID, NAME, SPELLS 
                  * 
                  */
-                $staticchampdata = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=spells&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                $staticchampdata = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=spells&api_key=insert_api_key_here")));
                 foreach($staticchampdata as $champdata){
                     if(is_object($champdata)){
                         $champdata = get_object_vars($champdata);
@@ -569,7 +569,7 @@ and open the template in the editor.
                  * GET ALL ITEMS AND ITEM DATA
                  * 
                  */
-                $allitems = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/item?itemListData=image&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                $allitems = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/item?itemListData=image&api_key=insert_api_key_here")));
                 foreach($allitems as $itemdata){
                     //var_dump($itemdata);
                     if(is_object($itemdata)){

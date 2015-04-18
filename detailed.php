@@ -201,7 +201,7 @@
 <?php
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
     //echo $_POST['summonerId'];
-    $staticchampdata = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=spells&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+    $staticchampdata = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=spells&api_key=insert_api_key_here")));
     foreach($staticchampdata as $champdata){
         if(is_object($champdata)){
             $champdata = get_object_vars($champdata);
@@ -223,7 +223,7 @@
         }
     }
                 
-    $allitems = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/item?itemListData=image&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+    $allitems = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/na/v1.2/item?itemListData=image&api_key=insert_api_key_here")));
     foreach($allitems as $itemdata){
         //var_dump($itemdata);
         if(is_object($itemdata)){
@@ -235,7 +235,7 @@
         }
         }
     }
-    $summonerspells = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/euw/v1.2/summoner-spell?api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+    $summonerspells = get_object_vars(json_decode(file_get_contents("https://global.api.pvp.net/api/lol/static-data/euw/v1.2/summoner-spell?api_key=insert_api_key_here")));
     foreach($summonerspells['data'] as $s_spells){
         if(is_object($s_spells)){
             $s_spells = get_object_vars($s_spells);
@@ -244,7 +244,7 @@
     }
                 
     
-    $matchdetails = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$_POST['gameId']."?includeTimeline=true&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+    $matchdetails = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$_POST['gameId']."?includeTimeline=true&api_key=insert_api_key_here")));
     //var_dump($matchdetails);
     foreach($matchdetails['teams'] as $teams){
         $teams = get_object_vars($teams);
