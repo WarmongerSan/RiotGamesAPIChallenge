@@ -20,10 +20,32 @@ and open the template in the editor.
         <link rel='stylesheet' id='jetpack_css-css'  href='http://www.lolhistoryapp.com/wp-content/plugins/jetpack/css/jetpack.css?ver=3.4.1' type='text/css' media='all' />
         <script type="text/javascript">
             function viewChampions(that){
-                $(that).parent().siblings('#championsContainer').css("display", "block").animate({
+                $(that).parent().parent().siblings('#championsContainer').css("display", "block").animate({
                                                                         marginTop: "0px",
                                                                         opacity: 1
                                                                       }, 3000 );
+                $(that).animate({
+                        opacity: 0
+                      }, 1500, function(){
+                          $(that).css("display", "none");
+                          $(that).prev("button").css("display", "block").animate({
+                        opacity: 1
+                      }, 1500);
+                      });
+            }
+            function hideChampions(that){
+                $(that).parent().parent().siblings('#championsContainer').animate({
+                                                                        marginTop: "-1000px",
+                                                                        opacity: 0
+                                                                      }, 3000, function(){ $(that).parent().parent().siblings('#championsContainer').css("display", "none") } );
+                $(that).animate({
+                        opacity: 0
+                      }, 1500, function(){
+                          $(that).css("display", "none");
+                          $(that).next("button").css("display", "block").animate({
+                        opacity: 1
+                      }, 1500);
+                      });
             }
             //function viewDetailedPage(){
             //   window.location.href = 'detailed.php'; 
@@ -32,7 +54,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <style>
-            #kda > h1, #kda > h2{
+            #kda > h1, #kda > h2, #champIntro > h1, #champIntro > h2{
                 margin-bottom: 0;
                 display: inline-block;
             }
@@ -126,6 +148,13 @@ and open the template in the editor.
             }
             input{
                 text-align: center;
+            }
+            #container hr{
+                margin-left: 25%;
+            }
+            #readLess{
+                opacity: 0;
+                display: none;
             }
         </style>
     </head>
@@ -489,6 +518,7 @@ and open the template in the editor.
                                   <br /><br />
                                   <div id='detailsButtons'>
                                   <form action='detailed.php' method='post'>
+                                  <button type='button' id='readLess' class='btn btn-default' onclick='hideChampions(this)'>Read less</button>
                                   <button type='button' id='readMore' class='btn btn-default' onclick='viewChampions(this)'>Read more</button>
                                   <button type='submit' id='extraDetails' class='btn btn-default'>Detailed page</button>
                                   <input type='hidden' name='server' value='".$_POST['server']."' />

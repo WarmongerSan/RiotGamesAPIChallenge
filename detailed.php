@@ -84,6 +84,14 @@
                     }
                     var value = document.getElementById('summonerId').value;
                     document.getElementById('summonerId').value = value+1;
+                    
+                    if($("body").find("#container:visible") == $("body #container:nth-child(7)")){
+                        $(".eventAnimation").fadeOut( function(){ $(".eventAnimation").css("display", "none"); });
+                    } else {
+                        if($(".eventAnimation").css("display", "none")){
+                            $(".eventAnimation").css("display", "inline-block").fadeIn();
+                        }
+                    }
                 });
                 //if($("body").find("#container:visible").length > 1){
                 //    $("body").find("#container:visible:first").css("display", "none");
@@ -100,6 +108,28 @@
                     }
                     var value = document.getElementById('summonerId').value;
                     document.getElementById('summonerId').value = value-1;
+                    
+                    if($("body").find("#container:visible") == $("body #container:nth-child(7)")){
+                        $(".eventAnimation").fadeOut( function(){ $(".eventAnimation").css("display", "none"); });
+                    } else {
+                        if($(".eventAnimation").css("display", "none")){
+                            $(".eventAnimation").css("display", "inline-block").fadeIn();
+                        }
+                    }
+                });
+            }
+            
+            function Team100(){
+                $("body").find("#container:visible").fadeOut( function() {
+                    $("body #container:nth-child(7)").fadeIn();
+                    $(".eventAnimation").fadeOut( function(){ $(".eventAnimation").css("display", "none"); });
+                });
+            }
+            
+            function Team200(){
+                $("body").find("#container:visible").fadeOut( function() {
+                    $("body #container:nth-child(14)").fadeIn();
+                    $(".eventAnimation").fadeOut( function(){ $(".eventAnimation").css("display", "none"); });
                 });
             }
             
@@ -155,11 +185,11 @@
     <div id='pagerContainer'> 
         <form action="eventAnimation.php" id="eventAnimation" method="post">
             <ul class="pager">
-                <li class="previous"><a href="#" onclick="javascript: Previous();">Previous Player</a></li>
+                <li class="previous"><a href="#" onclick="javascript: Previous();">Previous</a></li>
                 <li class="team100"><a href="#" onclick="javascript: Team100();">Blue Team</a></li>
                 <li class="eventAnimation"><a href="#" onclick="javascript: eventAnimation();">Event Overview</a></li>
                 <li class="team200"><a href="#" onclick="javascript: Team200();">Purple Team</a></li>
-                <li class="next"><a href="#" onclick="javascript: Next();">Next Player</a></li>
+                <li class="next"><a href="#" onclick="javascript: Next();">Next</a></li>
             </ul>
             <input type='hidden' name='server' value='<?php echo $_POST['server'] ?>' />
             <input type='hidden' name='gameId' value='<?php echo $_POST['gameId'] ?>' />
@@ -221,6 +251,48 @@
         $team[] = $teams;
     }
     
+    $blueDeaths = 0;
+    $blueKills = 0;
+    $blueAssists = 0;
+    $blueDragons = 0;
+    $blueBarons = 0;
+    $blueMinions = 0;
+    $blueTowers = 0;
+    $blueInhibs = 0;
+    $bluePhysicDmgDealt = 0;
+    $blueMagicDmgDealt = 0;
+    $blueTrueDmgDealt = 0;
+    $blueTotalDmgDealt = 0;
+    $bluePhysicDmgTaken = 0;
+    $blueMagicDmgTaken = 0;
+    $blueTrueDmgTaken = 0;
+    $blueTotalDmgTaken = 0;
+    $blueWardsPlaced = 0;
+    $blueWardsKilled = 0;
+    $blueSightWards = 0;
+    $blueVisionWards = 0;
+    
+    $purpleDeaths = 0;
+    $purpleKills = 0;
+    $purpleAssists = 0;
+    $purpleDragons = 0;
+    $purpleBarons = 0;
+    $purpleMinions = 0;
+    $purpleTowers = 0;
+    $purpleInhibs = 0;
+    $purplePhysicDmgDealt = 0;
+    $purpleMagicDmgDealt = 0;
+    $purpleTrueDmgDealt = 0;
+    $purpleTotalDmgDealt = 0;
+    $purplePhysicDmgTaken = 0;
+    $purpleMagicDmgTaken = 0;
+    $purpleTrueDmgTaken = 0;
+    $purpleTotalDmgTaken = 0;
+    $purpleWardsPlaced = 0;
+    $purpleWardsKilled = 0;
+    $purpleSightWards = 0;
+    $purpleVisionWards = 0;
+    
     foreach($matchdetails['participants'] AS $eachParticipant){
         if(is_object($eachParticipant)){
             $eachParticipant = get_object_vars($eachParticipant);
@@ -267,11 +339,12 @@
                            $LastJungleItemBought = $items[$userEvent['itemId']]['name'];
                        }
                     }
-                    if($userEvent['eventType'] === "DRAGON_KILL"){
-                        $dragon += 1;
-                    }
-                    if($userEvent['eventType'] === "BARON_KILL"){
-                        $baron += 1;
+                    if($userEvent['eventType'] === "ELITE_MONSTER_KILL"){
+                        if($userEvent['monsterType'] == "DRAGON"){
+                            $dragon += 1;
+                        } elseif($userEvent['monsterType'] == "BARON_NASHOR"){
+                            $baron += 1;
+                        }
                     }
                 }
             }
@@ -312,7 +385,94 @@
         if(!array_key_exists('assists', $stats)) { $stats['assists'] = 0; }
         if(!array_key_exists('kills', $stats)) { $stats['kills'] = 0; }
         if(!array_key_exists('deaths', $stats)) { $stats['deaths'] = 0; }
+        if($eachParticipant['participantId'] <= 6){
+            $blueDeaths += $stats['deaths'];
+            $blueKills += $stats['kills'];
+            $blueAssists += $stats['assists'];
+            $blueDragons += $dragon;
+            $blueBarons += $baron;
+            $blueMinions += get_object_vars($eachParticipant['stats'])['minionsKilled'];
+            $blueTowers += get_object_vars($eachParticipant['stats'])['towerKills'];
+            $bluePhysicDmgDealt += get_object_vars($eachParticipant['stats'])['physicalDamageDealt'];
+            $blueMagicDmgDealt += get_object_vars($eachParticipant['stats'])['magicDamageDealt'];
+            $blueTrueDmgDealt += get_object_vars($eachParticipant['stats'])['trueDamageDealt'];
+            $blueTotalDmgDealt += get_object_vars($eachParticipant['stats'])['totalDamageDealt'];
+            $bluePhysicDmgTaken += get_object_vars($eachParticipant['stats'])['physicalDamageTaken'];
+            $blueMagicDmgTaken += get_object_vars($eachParticipant['stats'])['magicalDamageTaken'];
+            $blueTrueDmgTaken += get_object_vars($eachParticipant['stats'])['trueDamageTaken'];
+            $blueTotalDmgTaken += get_object_vars($eachParticipant['stats'])['totalDamageTaken'];
+            $blueWardsPlaced += get_object_vars($eachParticipant['stats'])['wardsPlaced'];
+            $blueWardsKilled += get_object_vars($eachParticipant['stats'])['wardsKilled'];
+            $blueSightWards += get_object_vars($eachParticipant['stats'])['sightWardsBoughtInGame'];
+            $blueVisionWards += get_object_vars($eachParticipant['stats'])['visionWardsBoughtInGame'];
+        } elseif($eachParticipant['participantId'] <= 10) {
+            $purpleDeaths += $stats['deaths'];
+            $purpleKills += $stats['kills'];
+            $purpleAssists += $stats['assists'];
+            $purpleDragons += $dragon;
+            $purpleBarons += $baron;
+            $purpleMinions += get_object_vars($eachParticipant['stats'])['minionsKilled'];
+            $purpleTowers += get_object_vars($eachParticipant['stats'])['towerKills'];
+            $purplePhysicDmgDealt += get_object_vars($eachParticipant['stats'])['physicalDamageDealt'];
+            $purpleMagicDmgDealt += get_object_vars($eachParticipant['stats'])['magicDamageDealt'];
+            $purpleTrueDmgDealt += get_object_vars($eachParticipant['stats'])['trueDamageDealt'];
+            $purpleTotalDmgDealt += get_object_vars($eachParticipant['stats'])['totalDamageDealt'];
+            $purplePhysicDmgTaken += get_object_vars($eachParticipant['stats'])['physicalDamageTaken'];
+            $purpleMagicDmgTaken += get_object_vars($eachParticipant['stats'])['magicalDamageTaken'];
+            $purpleTrueDmgTaken += get_object_vars($eachParticipant['stats'])['trueDamageTaken'];
+            $purpleTotalDmgTaken += get_object_vars($eachParticipant['stats'])['totalDamageTaken'];
+            $purpleWardsPlaced += get_object_vars($eachParticipant['stats'])['wardsPlaced'];
+            $purpleWardsKilled += get_object_vars($eachParticipant['stats'])['wardsKilled'];
+            $purpleSightWards += get_object_vars($eachParticipant['stats'])['sightWardsBoughtInGame'];
+            $purpleVisionWards += get_object_vars($eachParticipant['stats'])['visionWardsBoughtInGame'];
+        }
+        $bluekda = "<h2>" . $blueKills . " / " . $blueDeaths . " / " . $blueAssists . "</h2>";
+        $purplekda = "<h2>" . $purpleKills . " / " . $purpleDeaths . " / " . $purpleAssists . "</h2>";
         $kda[$eachParticipant['participantId']] = "<h2>" . $stats['kills'] . " / " . $stats['deaths'] . " / " . $stats['assists'] . "</h2>";
+        if($eachParticipant['participantId'] == 5){
+            echo "
+                <div id='container' style='display:none;'>
+                    <div id='endStatus' class='jumbotron'>
+                 ";
+                   if($team[0]['winner'] == 1){
+                        echo "<span class='victory'>Victory</span>";
+                    } else {
+                        echo "<span class='defeat'>Defeat</span>";
+                    } 
+            echo "
+                    </div>
+                    <div id='statsContainer' class='jumbotron'>
+                        <div id='champIntro'><h1>Blue team</h1>&nbsp;&nbsp;" . $bluekda . "</div>
+                        <div id='timeDateType'>".date('i', $matchdetails['matchDuration'])."m , ".date("M, d-Y H:i", $matchdetails['matchCreation']/1000)." | ".str_replace("_", " ", $matchdetails['queueType'])."</div>
+                        <div style='clear: both;'></div>
+                    </div>
+                    <div id='extraStats' class='jumbotron'>
+                        <table class='table table-striped'>
+                            <tr><th colspan='2'>Kills</th></tr>
+                            <tr><td>Champions</td><td>".$blueKills."</td></tr>
+                            <tr><td>Minions</td><td>".$blueMinions."</td></tr>
+                            <tr><td>Turrets</td><td>".$blueTowers."</td></tr>
+                            <tr><td>Dragons</td><td>".$blueDragons."</td></tr>
+                            <tr><td>Barons</td><td>".$blueBarons."</td></tr>
+                            <tr><th colspan='2'>Damage</th></tr>
+                            <tr><td>Physical damage dealt</td><td>".$bluePhysicDmgDealt."</td></tr>
+                            <tr><td>Magical damage dealt</td><td>".$blueMagicDmgDealt."</td></tr>
+                            <tr><td>True damage dealt</td><td>".$blueTrueDmgDealt."</td></tr>
+                            <tr><td>Total damage dealt</td><td>".$blueTotalDmgDealt."</td></tr>
+                            <tr><td>Physical damage taken</td><td>".$bluePhysicDmgTaken."</td></tr>
+                            <tr><td>Magical damage taken</td><td>".$blueMagicDmgTaken."</td></tr>
+                            <tr><td>True damage taken</td><td>".$blueTrueDmgTaken."</td></tr>
+                            <tr><td>Total damage taken</td><td>".$blueTotalDmgTaken."</td></tr>
+                            <tr><th colspan='2'>Wards</th></tr>
+                            <tr><td>Wards placed</td><td>".$blueWardsPlaced."</td></tr>
+                            <tr><td>Wards killed</td><td>".$blueWardsKilled."</td></tr>
+                            <tr><td>Sight Wards bought</td><td>".$blueSightWards."</td></tr>
+                            <tr><td>Vision Wards bought</td><td>".$blueVisionWards."</td></tr>
+                        </table>
+                    </div>
+                </div>
+                 ";
+        }
         if($eachParticipant['participantId'] == $_POST['summonerId']){
             echo "  <div id='container'>";
             $DISPLAYEDID = $eachParticipant['participantId'];
@@ -369,7 +529,6 @@
                         <tr><td>Champions</td><td>".get_object_vars($eachParticipant['stats'])['kills']."</td></tr>
                         <tr><td>Minions</td><td>".get_object_vars($eachParticipant['stats'])['minionsKilled']."</td></tr>
                         <tr><td>Turrets</td><td>".get_object_vars($eachParticipant['stats'])['towerKills']."</td></tr>
-                        <tr><td>Inhibitors</td><td>".get_object_vars($eachParticipant['stats'])['inhibitorKills']."</td></tr>
                         <tr><td>Dragons</td><td>".$dragon."</td></tr>
                         <tr><td>Barons</td><td>".$baron."</td></tr>
                         <tr><th colspan='2'>Damage</th></tr>
@@ -390,6 +549,51 @@
                     </div>
                 </div>
             ";
+                  
+      if($eachParticipant['participantId'] == 10){
+            echo "
+                <div id='container' style='display:none;'>
+                    <div id='endStatus' class='jumbotron'>
+                 ";
+                   if($team[0]['winner'] == 1){
+                        echo "<span class='victory'>Victory</span>";
+                    } else {
+                        echo "<span class='defeat'>Defeat</span>";
+                    } 
+            echo "
+                    </div>
+                    <div id='statsContainer' class='jumbotron'>
+                        <div id='champIntro'><h1>Blue team</h1>&nbsp;&nbsp;" . $purplekda . "</div>
+                        <div id='timeDateType'>".date('i', $matchdetails['matchDuration'])."m , ".date("M, d-Y H:i", $matchdetails['matchCreation']/1000)." | ".str_replace("_", " ", $matchdetails['queueType'])."</div>
+                        <div style='clear: both;'></div>
+                    </div>
+                    <div id='extraStats' class='jumbotron'>
+                        <table class='table table-striped'>
+                            <tr><th colspan='2'>Kills</th></tr>
+                            <tr><td>Champions</td><td>".$purpleKills."</td></tr>
+                            <tr><td>Minions</td><td>".$purpleMinions."</td></tr>
+                            <tr><td>Turrets</td><td>".$purpleTowers."</td></tr>
+                            <tr><td>Dragons</td><td>".$purpleDragons."</td></tr>
+                            <tr><td>Barons</td><td>".$purpleBarons."</td></tr>
+                            <tr><th colspan='2'>Damage</th></tr>
+                            <tr><td>Physical damage dealt</td><td>".$purplePhysicDmgDealt."</td></tr>
+                            <tr><td>Magical damage dealt</td><td>".$purpleMagicDmgDealt."</td></tr>
+                            <tr><td>True damage dealt</td><td>".$purpleTrueDmgDealt."</td></tr>
+                            <tr><td>Total damage dealt</td><td>".$purpleTotalDmgDealt."</td></tr>
+                            <tr><td>Physical damage taken</td><td>".$purplePhysicDmgTaken."</td></tr>
+                            <tr><td>Magical damage taken</td><td>".$purpleMagicDmgTaken."</td></tr>
+                            <tr><td>True damage taken</td><td>".$purpleTrueDmgTaken."</td></tr>
+                            <tr><td>Total damage taken</td><td>".$purpleTotalDmgTaken."</td></tr>
+                            <tr><th colspan='2'>Wards</th></tr>
+                            <tr><td>Wards placed</td><td>".$purpleWardsPlaced."</td></tr>
+                            <tr><td>Wards killed</td><td>".$purpleWardsKilled."</td></tr>
+                            <tr><td>Sight Wards bought</td><td>".$purpleSightWards."</td></tr>
+                            <tr><td>Vision Wards bought</td><td>".$purpleVisionWards."</td></tr>
+                        </table>
+                    </div>
+                </div>
+                 ";
+        }
     }
     if(isset($DISPLAYEDID)){
         echo "
