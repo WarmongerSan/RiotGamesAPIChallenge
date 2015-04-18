@@ -563,7 +563,7 @@
             echo "
                     </div>
                     <div id='statsContainer' class='jumbotron'>
-                        <div id='champIntro'><h1>Blue team</h1>&nbsp;&nbsp;" . $purplekda . "</div>
+                        <div id='champIntro'><h1>Purple team</h1>&nbsp;&nbsp;" . $purplekda . "</div>
                         <div id='timeDateType'>".date('i', $matchdetails['matchDuration'])."m , ".date("M, d-Y H:i", $matchdetails['matchCreation']/1000)." | ".str_replace("_", " ", $matchdetails['queueType'])."</div>
                         <div style='clear: both;'></div>
                     </div>
