@@ -276,7 +276,7 @@ and open the template in the editor.
                         foreach($matches as $match){
                             $match = get_object_vars($match);
                             $stats = get_object_vars($match['stats']);
-                            $matchdetails = get_object_vars(json_decode(file_get_contents("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$match['gameId']."?includeTimeline=true&api_key=79de72ae-b73d-4f43-ad31-4267915265ea")));
+                            $matchdetails = get_object_vars(json_decode(file_get_contents(urldecode("https://".$_POST['server'].".api.pvp.net/api/lol/".$_POST['server']."/v2.2/match/".$match['gameId']."?includeTimeline=true&api_key=79de72ae-b73d-4f43-ad31-4267915265ea"))));
                             //var_dump($matchdetails);
                             foreach($matchdetails['participants'] AS $eachParticipant){
                                 if(get_object_vars($eachParticipant)['championId'] == $match['championId']){
