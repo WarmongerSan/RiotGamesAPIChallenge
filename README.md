@@ -21,4 +21,4 @@ I didn't have too much time for this because of work, and yet i do still hope th
 
 Just read there needed to be a demo in readme :\
 
-www.lohistoryapp.com/RiotGamesAPI/index.php
+www.lolhistoryapp.com/RiotGamesAPI/index.php
