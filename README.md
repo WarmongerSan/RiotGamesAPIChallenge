@@ -16,3 +16,9 @@ I have made a recent match history of all matches along with urf,
 a page where alot of details are listed about the match and each player with Javascript animations,
 and a page where the events that occured for each player listed within animations etc.
 I didn't have too much time for this because of work, and yet i do still hope this is good.
+
+##################
+
+Just read there needed to be a demo in readme :\
+
+www.lohistoryapp.com/RiotGamesAPI/index.php
